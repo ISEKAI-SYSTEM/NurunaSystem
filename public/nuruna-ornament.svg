@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 400" fill="none">
+  <defs>
+    <path id="star" d="M0-148 31-75 105-105 75-31 148 0 75 31 105 105 31 75 0 148-31 75-105 105-75 31-148 0-75-31-105-105-31-75Z"/>
+    <pattern id="lattice" width="80" height="80" patternUnits="userSpaceOnUse">
+      <path d="M40 0 80 40 40 80 0 40Z M0 0 40 40 80 0 M0 80 40 40 80 80" stroke="#d7ba7c" stroke-opacity=".13"/>
+    </pattern>
+  </defs>
+  <path d="M80 200 280 0H480V400H280Z" fill="url(#lattice)"/>
+  <g transform="translate(316 200)" stroke="#e6c47e">
+    <circle r="175" stroke-opacity=".29"/>
+    <circle r="165" stroke-opacity=".48"/>
+    <path d="M0-161 114-114 161 0 114 114 0 161-114 114-161 0-114-114Z" stroke-opacity=".39"/>
+    <use href="#star" stroke-opacity=".8"/>
+    <use href="#star" transform="rotate(22.5) scale(.78)" stroke-opacity=".51"/>
+    <use href="#star" transform="scale(.58)" stroke-opacity=".76"/>
+    <circle r="38" stroke-opacity=".59"/>
+    <path d="M0-29 8-8 29 0 8 8 0 29-8 8-29 0-8-8Z" fill="#e6c47e" fill-opacity=".18"/>
+    <circle r="3" fill="#e6c47e"/>
+  </g>
+  <path d="M77 200 84 193 91 200 84 207Z M156 89 161 84 166 89 161 94Z M156 311 161 306 166 311 161 316Z" fill="#e6c47e" fill-opacity=".7"/>
+</svg>

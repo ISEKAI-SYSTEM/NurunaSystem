@@ -1,0 +1,233 @@
+.card {
+  --card-ease: cubic-bezier(0.2, 0, 0, 1);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1rem;
+  min-block-size: 4.75rem;
+  block-size: 100%;
+  padding: 0.875rem 1rem;
+  border: 1px solid var(--home-line);
+  border-radius: 0.75rem;
+  background: var(--home-surface);
+  color: var(--home-ink);
+  line-height: 1.25;
+  transition:
+    border-color 200ms var(--card-ease),
+    background-color 200ms var(--card-ease),
+    box-shadow 200ms var(--card-ease);
+}
+
+.card:hover {
+  border-color: #26a69a;
+}
+
+.card[aria-current="page"] {
+  border-color: var(--home-accent);
+  background: var(--home-selected);
+}
+
+.card:focus-visible {
+  outline-offset: -3px !important;
+}
+
+.number {
+  display: grid;
+  inline-size: 2.75rem;
+  block-size: 2.75rem;
+  place-items: center;
+  border-radius: 0.5rem;
+  background: var(--home-icon);
+  color: #44403c;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  transition:
+    background-color 200ms var(--card-ease),
+    color 200ms var(--card-ease);
+}
+
+.card:hover .number {
+  background: var(--home-selected);
+  color: var(--home-accent);
+}
+
+.card[aria-current="page"] .number {
+  background: var(--home-accent);
+  color: var(--home-light);
+}
+
+.card:not([data-compact]) .number {
+  inline-size: 2.125rem;
+  block-size: 2.125rem;
+  margin-inline: 0.3125rem;
+  rotate: 45deg;
+  border-radius: 0.375rem;
+}
+
+.card:not([data-compact]) .number > span {
+  rotate: -45deg;
+}
+
+.names,
+.details {
+  display: grid;
+  gap: 0.25rem;
+  color: #78716c;
+  font-size: 0.8125rem;
+}
+
+.names {
+  overflow-wrap: anywhere;
+}
+
+.names strong {
+  color: var(--home-ink);
+  font-size: 1rem;
+  font-weight: 700;
+  transition: color 200ms var(--card-ease);
+}
+
+.card:hover .names strong,
+.card[aria-current="page"] .names strong {
+  color: var(--home-accent);
+}
+
+.names strong svg {
+  display: inline;
+  margin-inline-start: 0.25rem;
+  color: var(--home-gold-line);
+}
+
+.details {
+  justify-self: end;
+  text-align: end;
+}
+
+.arabic {
+  color: var(--home-accent);
+  font-size: 1.375rem;
+  line-height: 1.5;
+}
+
+.card[data-compact] {
+  gap: 0.75rem;
+  min-block-size: 3.5rem;
+  padding: 0.5rem 0.625rem;
+  border-color: transparent;
+  background: transparent;
+  transition:
+    border-color 200ms var(--card-ease),
+    background-color 200ms var(--card-ease),
+    scale 150ms var(--card-ease);
+}
+
+.card[data-compact]:active {
+  scale: 0.98;
+}
+
+.card[data-compact] .number {
+  inline-size: 1.75rem;
+  block-size: 1.75rem;
+  margin-inline: 0.25rem;
+  rotate: 45deg;
+  border-radius: 0.3125rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.card[data-compact] .number > span {
+  rotate: -45deg;
+}
+
+.card[data-compact] .names,
+.card[data-compact] .details {
+  gap: 0.125rem;
+  font-size: 0.75rem;
+}
+
+.card[data-compact] .names strong {
+  font-size: 0.9375rem;
+}
+
+.card[data-compact] .arabic {
+  color: var(--home-ink);
+  font-size: 1.125rem;
+  line-height: 1.75;
+}
+
+.card[data-compact] .details {
+  gap: 0;
+}
+
+.card[data-compact]:is(:hover, :focus-visible) {
+  border-color: var(--home-line);
+  background: var(--home-icon);
+}
+
+.card[data-compact]:is(:hover, :focus-visible) .number {
+  background: var(--home-surface);
+}
+
+.card[data-compact][aria-current="page"] {
+  border-color: color-mix(in srgb, var(--home-accent) 45%, var(--home-line));
+  background: var(--home-selected);
+}
+
+.card[data-compact][aria-current="page"] .number {
+  background: var(--home-accent);
+  color: var(--home-light);
+}
+
+.card[data-compact][aria-current="page"] .names strong {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+@container surah-results (max-width: 60rem) {
+  .card:not([data-compact]) {
+    gap: 0.75rem;
+    padding: 0.75rem 0.875rem;
+  }
+
+  .card:not([data-compact]) .number {
+    inline-size: 1.9375rem;
+    block-size: 1.9375rem;
+    margin-inline: 0.25rem;
+  }
+
+  .card:not([data-compact]) .arabic {
+    font-size: 1.25rem;
+  }
+}
+
+.card {
+  border-radius: 1rem;
+}
+
+.card:not([data-compact]):hover {
+  box-shadow: 0 1px 3px rgb(0 51 48 / 0.08);
+}
+
+.card:not([data-compact]):active {
+  background: color-mix(in srgb, var(--home-accent) 6%, var(--home-surface));
+}
+
+.number {
+  border-radius: 0.875rem;
+}
+
+.card[data-compact] .number {
+  border-radius: 0.375rem;
+}
+
+html[data-contrast="tinggi"] .number,
+html[data-contrast="tinggi"] :is(.names, .details) {
+  color: var(--home-ink);
+}
+
+@media (forced-colors: active) {
+  .card[data-compact] .arabic {
+    color: CanvasText;
+  }
+}

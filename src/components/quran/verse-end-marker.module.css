@@ -1,0 +1,22 @@
+.marker {
+  display: inline-grid;
+  inline-size: 1.7em;
+  block-size: 1.7em;
+  margin-inline: 0.25em;
+  place-items: center;
+  border: 1.5px solid currentColor;
+  border-radius: 50%;
+  font-family: system-ui, sans-serif;
+  font-size: 0.55em;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.marker > span {
+  font-size: 0.9em;
+}
+
+.marker[data-wide] {
+  inline-size: 2em;
+  block-size: 2em;
+}

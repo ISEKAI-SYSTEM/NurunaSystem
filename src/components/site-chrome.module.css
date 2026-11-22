@@ -1,0 +1,364 @@
+.header {
+  --chrome-ease: cubic-bezier(0.2, 0, 0, 1);
+  position: relative;
+  z-index: 40;
+  overflow-anchor: none;
+  color: var(--home-ink);
+}
+
+.bar {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+  inline-size: 100%;
+  max-inline-size: 100%;
+  min-block-size: 4.25rem;
+  margin-inline: auto;
+  padding: 0.625rem clamp(1rem, 3vw, 2.5rem);
+  border: 1px solid transparent;
+  border-block-end-color: var(--home-line);
+  background-color: var(--home-surface);
+  transition:
+    max-inline-size 450ms var(--chrome-ease),
+    min-block-size 450ms var(--chrome-ease),
+    translate 450ms var(--chrome-ease),
+    padding 450ms var(--chrome-ease),
+    border-radius 450ms var(--chrome-ease),
+    border-color 300ms var(--chrome-ease),
+    background-color 300ms var(--chrome-ease),
+    box-shadow 450ms var(--chrome-ease);
+}
+
+.brand {
+  display: inline-flex;
+  justify-self: start;
+  min-block-size: 2.75rem;
+  align-items: center;
+  gap: 0.625rem;
+  border-radius: 0.75rem;
+}
+
+.brandMark {
+  display: grid;
+  width: 2.5rem;
+  height: 2.5rem;
+  place-items: center;
+  border-radius: 0.75rem;
+  background: var(--home-hero);
+  color: var(--home-light);
+  transition:
+    border-radius 450ms var(--chrome-ease),
+    background-color 300ms var(--chrome-ease),
+    color 300ms var(--chrome-ease);
+}
+
+.brandName {
+  font-size: 1.375rem;
+  font-weight: 750;
+  letter-spacing: -0.025em;
+}
+
+.nav {
+  min-inline-size: 0;
+}
+
+.nav ul {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.nav a {
+  display: inline-flex;
+  min-block-size: 2.75rem;
+  align-items: center;
+  gap: 0.375rem;
+  padding-inline: 0.875rem;
+  border-radius: 999px;
+  color: #44403c;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background-color 200ms var(--chrome-ease), color 200ms var(--chrome-ease);
+}
+
+.nav a:hover {
+  background: var(--home-icon);
+  color: var(--home-ink);
+}
+
+.nav a[aria-current="page"] {
+  background: var(--home-selected);
+  color: var(--home-accent);
+  font-weight: 700;
+  box-shadow: inset 0 0 0 1px #80cbc4;
+}
+
+.actions {
+  display: flex;
+  justify-self: end;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+@media (width > 56rem) and (height > 35rem) {
+  .header {
+    position: sticky;
+    inset-block-start: 0;
+    block-size: 4.25rem;
+  }
+
+  .header {
+    pointer-events: none;
+  }
+
+  .bar {
+    pointer-events: auto;
+  }
+
+  :global([data-workspace="reader"]) > .header[data-hidden]:not(:focus-within) .bar {
+    translate: 0 calc(-100% - 1.5rem);
+    box-shadow: none;
+  }
+
+  .header[data-scrolled] .brandMark {
+    border-radius: 50%;
+  }
+
+  :global([data-workspace]):has([data-bleed]) > .header:not([data-scrolled]) .bar {
+    border-block-end-color: rgb(255 255 255 / 0.12);
+    background-color: transparent;
+    color: var(--home-light);
+  }
+
+  :global([data-workspace]):has([data-bleed]) > .header:not([data-scrolled]) .brandMark {
+    background: var(--home-gold);
+    color: var(--home-gold-ink);
+  }
+
+  :global([data-workspace]):has([data-bleed]) > .header:not([data-scrolled]) .nav a {
+    color: rgb(255 255 255 / 0.86);
+  }
+
+  :global([data-workspace]):has([data-bleed]) > .header:not([data-scrolled]) .nav a:hover {
+    background: rgb(255 255 255 / 0.1);
+    color: var(--home-light);
+  }
+
+  :global([data-workspace]):has([data-bleed]) > .header:not([data-scrolled]) .nav a[aria-current="page"] {
+    background: rgb(255 255 255 / 0.14);
+    color: var(--home-light);
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.35);
+  }
+
+  :global([data-workspace]):has([data-bleed]) > .header:not([data-scrolled]) :is(.brand, .nav a):focus-visible {
+    --focus: var(--home-focus-dark);
+  }
+
+  .header[data-scrolled] .bar {
+    max-inline-size: min(60rem, 100% - 2rem);
+    min-block-size: 3.75rem;
+    translate: 0 0.75rem;
+    padding: 0.375rem 0.5rem 0.375rem 0.625rem;
+    border-color: rgb(255 255 255 / 0.7);
+    border-radius: 1.875rem;
+    background-color: rgb(255 255 255 / 0.8);
+    box-shadow:
+      0 1px 2px rgb(0 51 48 / 0.08),
+      0 12px 32px -12px rgb(0 51 48 / 0.32);
+    backdrop-filter: blur(14px) saturate(1.5);
+  }
+
+  .header[data-scrolled] .actions [data-label] {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .header[data-scrolled] .actions button {
+    padding-inline: 0.75rem;
+  }
+}
+
+@media (width <= 72rem) {
+  .actions [data-label] {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .actions button {
+    padding-inline: 0.75rem;
+  }
+}
+
+@media (width <= 56rem) {
+  .bar {
+    display: flex;
+    flex-wrap: wrap;
+    padding-block: 0.625rem 0.375rem;
+  }
+
+  .actions {
+    margin-inline-start: auto;
+  }
+
+  .nav {
+    order: 3;
+    flex-basis: 100%;
+    margin-inline: calc(-1 * clamp(1rem, 3vw, 2.5rem));
+    overflow-x: auto;
+    padding: 0.25rem clamp(1rem, 3vw, 2.5rem);
+    scrollbar-width: none;
+  }
+}
+
+html[data-contrast="tinggi"] .footer::before {
+  display: none;
+}
+
+html[data-contrast="tinggi"] .header[data-scrolled] .bar {
+  border-color: var(--home-line);
+  background-color: var(--home-surface);
+  backdrop-filter: none;
+}
+
+.footer {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  margin-block-start: auto;
+  background: linear-gradient(160deg, var(--home-hero-deep), #004d40 60%, var(--home-hero));
+  color: var(--home-light);
+}
+
+.footer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--home-gold);
+  mask:
+    url("/nuruna-pattern.svg") 0 0 / 56px 56px repeat,
+    radial-gradient(ellipse 55% 90% at 100% 0%, #000, transparent 70%);
+  mask-composite: intersect;
+  opacity: 0.12;
+  pointer-events: none;
+}
+
+.footer :is(a, button):focus-visible {
+  --focus: var(--home-focus-dark);
+}
+
+.footerInner,
+.footerBottom {
+  max-inline-size: 80rem;
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 3vw, 2.5rem);
+}
+
+.footerInner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) repeat(2, minmax(0, 1fr));
+  gap: 2rem 3rem;
+  padding-block: clamp(2.5rem, 5vw, 3.5rem) 2rem;
+}
+
+.footerBrand .brandMark {
+  background: var(--home-gold);
+  color: var(--home-gold-ink);
+}
+
+.footerBrand p {
+  max-inline-size: 36ch;
+  margin-block-start: 0.875rem;
+  color: var(--home-light-muted);
+  line-height: 1.6;
+}
+
+.footerColumn h2 {
+  margin-block-end: 0.5rem;
+  color: var(--home-gold);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.footerColumn ul {
+  display: grid;
+}
+
+.footerColumn a {
+  display: inline-flex;
+  min-block-size: 2.25rem;
+  align-items: center;
+  color: var(--home-light-muted);
+  transition: color 200ms;
+}
+
+.footer a:hover {
+  color: var(--home-light);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.footerBottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem 2rem;
+  padding-block: 1.25rem 1.5rem;
+  border-block-start: 1px solid rgb(255 255 255 / 0.14);
+  color: var(--home-light-muted);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+html:has([data-to-top]) .footerBottom {
+  padding-block-end: 5.5rem;
+}
+
+.footerBottom strong {
+  color: var(--home-gold-hover);
+  font-weight: 700;
+}
+
+.footerBottom a {
+  color: var(--home-light);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+html[data-contrast="tinggi"] .footer {
+  background: var(--home-hero);
+}
+
+@media (forced-colors: active) {
+  .bar,
+  .footer {
+    border: 1px solid CanvasText;
+  }
+
+  .footer::before {
+    display: none;
+  }
+}
+
+@media (width <= 48rem) {
+  .footerInner {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .footerBrand {
+    grid-column: 1 / -1;
+  }
+}

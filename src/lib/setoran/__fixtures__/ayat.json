@@ -1,0 +1,296 @@
+{
+  "source": "https://api.quran.com/api/v4",
+  "verses": {
+    "1:1": [
+      {
+        "position": 1,
+        "uthmani": "بِسْمِ",
+        "imlaei": "بسم"
+      },
+      {
+        "position": 2,
+        "uthmani": "ٱللَّهِ",
+        "imlaei": "الله"
+      },
+      {
+        "position": 3,
+        "uthmani": "ٱلرَّحْمَـٰنِ",
+        "imlaei": "الرحمان"
+      },
+      {
+        "position": 4,
+        "uthmani": "ٱلرَّحِيمِ",
+        "imlaei": "الرحيم"
+      }
+    ],
+    "1:2": [
+      {
+        "position": 1,
+        "uthmani": "ٱلْحَمْدُ",
+        "imlaei": "الحمد"
+      },
+      {
+        "position": 2,
+        "uthmani": "لِلَّهِ",
+        "imlaei": "لله"
+      },
+      {
+        "position": 3,
+        "uthmani": "رَبِّ",
+        "imlaei": "رب"
+      },
+      {
+        "position": 4,
+        "uthmani": "ٱلْعَـٰلَمِينَ",
+        "imlaei": "العالمين"
+      }
+    ],
+    "1:5": [
+      {
+        "position": 1,
+        "uthmani": "إِيَّاكَ",
+        "imlaei": "اياك"
+      },
+      {
+        "position": 2,
+        "uthmani": "نَعْبُدُ",
+        "imlaei": "نعبد"
+      },
+      {
+        "position": 3,
+        "uthmani": "وَإِيَّاكَ",
+        "imlaei": "واياك"
+      },
+      {
+        "position": 4,
+        "uthmani": "نَسْتَعِينُ",
+        "imlaei": "نستعين"
+      }
+    ],
+    "1:7": [
+      {
+        "position": 1,
+        "uthmani": "صِرَٰطَ",
+        "imlaei": "صراط"
+      },
+      {
+        "position": 2,
+        "uthmani": "ٱلَّذِينَ",
+        "imlaei": "الذين"
+      },
+      {
+        "position": 3,
+        "uthmani": "أَنْعَمْتَ",
+        "imlaei": "انعمت"
+      },
+      {
+        "position": 4,
+        "uthmani": "عَلَيْهِمْ",
+        "imlaei": "عليهم"
+      },
+      {
+        "position": 5,
+        "uthmani": "غَيْرِ",
+        "imlaei": "غير"
+      },
+      {
+        "position": 6,
+        "uthmani": "ٱلْمَغْضُوبِ",
+        "imlaei": "المغضوب"
+      },
+      {
+        "position": 7,
+        "uthmani": "عَلَيْهِمْ",
+        "imlaei": "عليهم"
+      },
+      {
+        "position": 8,
+        "uthmani": "وَلَا",
+        "imlaei": "ولا"
+      },
+      {
+        "position": 9,
+        "uthmani": "ٱلضَّآلِّينَ",
+        "imlaei": "الضالين"
+      }
+    ],
+    "2:1": [
+      {
+        "position": 1,
+        "uthmani": "الٓمٓ",
+        "imlaei": "الم"
+      }
+    ],
+    "2:2": [
+      {
+        "position": 1,
+        "uthmani": "ذَٰلِكَ",
+        "imlaei": "ذالك"
+      },
+      {
+        "position": 2,
+        "uthmani": "ٱلْكِتَـٰبُ",
+        "imlaei": "الكتاب"
+      },
+      {
+        "position": 3,
+        "uthmani": "لَا",
+        "imlaei": "لا"
+      },
+      {
+        "position": 4,
+        "uthmani": "رَيْبَ ۛ",
+        "imlaei": "ريب"
+      },
+      {
+        "position": 5,
+        "uthmani": "فِيهِ ۛ",
+        "imlaei": "فيه"
+      },
+      {
+        "position": 6,
+        "uthmani": "هُدًۭى",
+        "imlaei": "هدى"
+      },
+      {
+        "position": 7,
+        "uthmani": "لِّلْمُتَّقِينَ",
+        "imlaei": "للمتقين"
+      }
+    ],
+    "2:21": [
+      {
+        "position": 1,
+        "uthmani": "يَـٰٓأَيُّهَا",
+        "imlaei": "يا ايها"
+      },
+      {
+        "position": 2,
+        "uthmani": "ٱلنَّاسُ",
+        "imlaei": "الناس"
+      },
+      {
+        "position": 3,
+        "uthmani": "ٱعْبُدُوا۟",
+        "imlaei": "اعبدوا"
+      },
+      {
+        "position": 4,
+        "uthmani": "رَبَّكُمُ",
+        "imlaei": "ربكم"
+      },
+      {
+        "position": 5,
+        "uthmani": "ٱلَّذِى",
+        "imlaei": "الذي"
+      },
+      {
+        "position": 6,
+        "uthmani": "خَلَقَكُمْ",
+        "imlaei": "خلقكم"
+      },
+      {
+        "position": 7,
+        "uthmani": "وَٱلَّذِينَ",
+        "imlaei": "والذين"
+      },
+      {
+        "position": 8,
+        "uthmani": "مِن",
+        "imlaei": "من"
+      },
+      {
+        "position": 9,
+        "uthmani": "قَبْلِكُمْ",
+        "imlaei": "قبلكم"
+      },
+      {
+        "position": 10,
+        "uthmani": "لَعَلَّكُمْ",
+        "imlaei": "لعلكم"
+      },
+      {
+        "position": 11,
+        "uthmani": "تَتَّقُونَ",
+        "imlaei": "تتقون"
+      }
+    ],
+    "19:1": [
+      {
+        "position": 1,
+        "uthmani": "كٓهيعٓصٓ",
+        "imlaei": "كهيعص"
+      }
+    ],
+    "36:1": [
+      {
+        "position": 1,
+        "uthmani": "يسٓ",
+        "imlaei": "يس"
+      }
+    ],
+    "42:2": [
+      {
+        "position": 1,
+        "uthmani": "عٓسٓقٓ",
+        "imlaei": "عسق"
+      }
+    ],
+    "112:1": [
+      {
+        "position": 1,
+        "uthmani": "قُلْ",
+        "imlaei": "قل"
+      },
+      {
+        "position": 2,
+        "uthmani": "هُوَ",
+        "imlaei": "هو"
+      },
+      {
+        "position": 3,
+        "uthmani": "ٱللَّهُ",
+        "imlaei": "الله"
+      },
+      {
+        "position": 4,
+        "uthmani": "أَحَدٌ",
+        "imlaei": "احد"
+      }
+    ],
+    "112:2": [
+      {
+        "position": 1,
+        "uthmani": "ٱللَّهُ",
+        "imlaei": "الله"
+      },
+      {
+        "position": 2,
+        "uthmani": "ٱلصَّمَدُ",
+        "imlaei": "الصمد"
+      }
+    ],
+    "114:1": [
+      {
+        "position": 1,
+        "uthmani": "قُلْ",
+        "imlaei": "قل"
+      },
+      {
+        "position": 2,
+        "uthmani": "أَعُوذُ",
+        "imlaei": "اعوذ"
+      },
+      {
+        "position": 3,
+        "uthmani": "بِرَبِّ",
+        "imlaei": "برب"
+      },
+      {
+        "position": 4,
+        "uthmani": "ٱلنَّاسِ",
+        "imlaei": "الناس"
+      }
+    ]
+  }
+}

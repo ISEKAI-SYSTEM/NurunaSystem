@@ -1,0 +1,378 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-sans);
+  --font-quran: var(--font-quran);
+  --color-highlight: var(--highlight);
+  --color-focus: var(--focus);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.5 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.556 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+  --highlight: oklch(0.94 0.1 95);
+  --focus: oklch(0.48 0.22 264);
+  --tajwid-diam: #475569;
+  --tajwid-mad-thabii: #854d0e;
+  --tajwid-mad-aridh: #9a3412;
+  --tajwid-mad-panjang: #991b1b;
+  --tajwid-dengung: #166534;
+  --tajwid-lebur: #6b21a8;
+  --tajwid-qalqalah: #1e40af;
+  --status-benar: #15803d;
+  --status-salah: #b91c1c;
+  --status-terlewat: #b45309;
+  --status-tambahan: #475569;
+  --home-paper: #fafaf9;
+  --home-surface: #ffffff;
+  --home-ink: #1c1917;
+  --home-muted: #57534e;
+  --home-line: #e7e5e4;
+  --home-rail: #ffffff;
+  --home-hero: #00695c;
+  --home-hero-deep: #003330;
+  --home-accent: #00796b;
+  --home-light: #ffffff;
+  --home-light-muted: #b2dfdb;
+  --home-dark-line: #2e7d72;
+  --home-gold: #e6c47e;
+  --home-gold-hover: #f2d69e;
+  --home-gold-ink: #2c2413;
+  --home-gold-line: #876222;
+  --home-selected: #e0f2f1;
+  --home-icon: #f5f5f4;
+  --home-focus: #00796b;
+  --home-focus-dark: #f2d69e;
+  --home-motion: 200ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+  --highlight: oklch(0.45 0.12 95);
+  --focus: oklch(0.75 0.15 264);
+  --tajwid-diam: #94a3b8;
+  --tajwid-mad-thabii: #facc15;
+  --tajwid-mad-aridh: #fb923c;
+  --tajwid-mad-panjang: #f87171;
+  --tajwid-dengung: #4ade80;
+  --tajwid-lebur: #c084fc;
+  --tajwid-qalqalah: #60a5fa;
+  --status-benar: #4ade80;
+  --status-salah: #f87171;
+  --status-terlewat: #fbbf24;
+  --status-tambahan: #94a3b8;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+
+  :where(
+    a[href],
+    button,
+    summary,
+    select,
+    label[for],
+    input:is([type="button"], [type="submit"], [type="reset"], [type="checkbox"], [type="radio"], [type="file"]),
+    [role="menuitemradio"]
+  ):not(:disabled, [aria-disabled="true"]) {
+    cursor: pointer;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus) !important;
+  outline-offset: 2px !important;
+}
+
+html:has(.pemutar-murottal) {
+  scroll-padding-bottom: 13rem;
+}
+.pemutar-murottal {
+  position: sticky;
+  bottom: 0;
+}
+@media (max-height: 30rem) {
+  html:has(.pemutar-murottal) {
+    scroll-padding-bottom: 0;
+  }
+  .pemutar-murottal {
+    position: static;
+  }
+}
+
+html[data-contrast="tinggi"] {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0 0 0);
+  --primary: oklch(0 0 0);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.9 0 0);
+  --secondary-foreground: oklch(0 0 0);
+  --muted: oklch(0.9 0 0);
+  --muted-foreground: oklch(0.15 0 0);
+  --accent: oklch(0.88 0 0);
+  --accent-foreground: oklch(0 0 0);
+  --border: oklch(0 0 0);
+  --input: oklch(0 0 0);
+  --highlight: oklch(0.9 0.19 100);
+  --focus: oklch(0.4 0.25 264);
+  --tajwid-diam: #334155;
+  --tajwid-mad-thabii: #713f12;
+  --tajwid-mad-aridh: #7c2d12;
+  --tajwid-mad-panjang: #7f1d1d;
+  --tajwid-dengung: #14532d;
+  --tajwid-lebur: #581c87;
+  --tajwid-qalqalah: #1e3a8a;
+  --status-benar: #14532d;
+  --status-salah: #7f1d1d;
+  --status-terlewat: #78350f;
+  --status-tambahan: #1e293b;
+  --home-paper: #fff;
+  --home-surface: #fff;
+  --home-ink: #000;
+  --home-muted: #222;
+  --home-line: #000;
+  --home-rail: #fff;
+  --home-hero: #161616;
+  --home-light: #fff;
+  --home-light-muted: #fff;
+  --home-dark-line: #fff;
+  --home-gold: #fff;
+  --home-gold-hover: #ddd;
+  --home-gold-ink: #000;
+  --home-gold-line: #000;
+  --home-selected: #eee;
+  --home-icon: #eee;
+  --home-focus: #1626a8;
+  --home-focus-dark: #ffdf58;
+  --home-hero-deep: #000;
+  --home-accent: #000;
+}
+
+html[data-arabic-size="sedang"] {
+  --quran-size: clamp(1.5rem, 1.3rem + 1vw, 2rem);
+}
+html[data-arabic-size="besar"] {
+  --quran-size: clamp(1.75rem, 1.4rem + 1.5vw, 2.5rem);
+}
+html[data-arabic-size="sangat-besar"] {
+  --quran-size: clamp(2.25rem, 1.8rem + 2vw, 3.25rem);
+}
+html[data-arabic-size="raksasa"] {
+  --quran-size: clamp(2.75rem, 2.2rem + 3vw, 4.25rem);
+}
+
+@layer components {
+  .setoran-kata[data-status="benar"] {
+    text-decoration: underline solid var(--status-benar) 2px;
+    text-underline-offset: 0.4em;
+  }
+  .setoran-kata[data-status="salah"] {
+    background: color-mix(in oklab, var(--status-salah) 14%, transparent);
+    text-decoration: underline wavy var(--status-salah) 2px;
+    text-underline-offset: 0.4em;
+  }
+  .setoran-kata[data-status="terlewat"] {
+    background: color-mix(in oklab, var(--status-terlewat) 14%, transparent);
+    outline: 2px dashed var(--status-terlewat);
+    outline-offset: 2px;
+  }
+  .setoran-kata[data-status="petunjuk"] {
+    text-decoration: underline dotted currentColor 2px;
+    text-underline-offset: 0.4em;
+    opacity: 0.75;
+  }
+  .setoran-kata[data-next] {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+  .setoran-status[data-status="benar"] {
+    border-inline-start-color: var(--status-benar);
+  }
+  .setoran-status[data-status="salah"] {
+    border-inline-start-color: var(--status-salah);
+  }
+  .setoran-status[data-status="terlewat"] {
+    border-inline-start-color: var(--status-terlewat);
+  }
+  .setoran-status[data-status="tambahan"] {
+    border-inline-start-color: var(--status-tambahan);
+  }
+  .setoran-status svg {
+    color: var(--status-tambahan);
+  }
+  .setoran-status[data-status="benar"] svg {
+    color: var(--status-benar);
+  }
+  .setoran-status[data-status="salah"] svg {
+    color: var(--status-salah);
+  }
+  .setoran-status[data-status="terlewat"] svg {
+    color: var(--status-terlewat);
+  }
+
+  .skip-link {
+    @apply sr-only;
+  }
+  .skip-link:focus {
+    @apply not-sr-only fixed start-4 top-4 z-50 rounded-lg bg-primary px-4 py-3 text-primary-foreground;
+  }
+
+  .quran-text {
+    font-family: var(--font-quran), serif;
+    font-size: var(--quran-size, clamp(1.75rem, 1.4rem + 1.5vw, 2.5rem));
+    line-height: 2.2;
+  }
+
+  [data-tajwid="diam"] {
+    color: var(--tajwid-diam);
+  }
+  [data-tajwid="mad-thabii"] {
+    color: var(--tajwid-mad-thabii);
+  }
+  [data-tajwid="mad-aridh"] {
+    color: var(--tajwid-mad-aridh);
+  }
+  [data-tajwid="mad-panjang"] {
+    color: var(--tajwid-mad-panjang);
+  }
+  [data-tajwid="dengung"] {
+    color: var(--tajwid-dengung);
+  }
+  [data-tajwid="lebur"] {
+    color: var(--tajwid-lebur);
+  }
+  [data-tajwid="qalqalah"] {
+    color: var(--tajwid-qalqalah);
+  }
+}
+
+@media (width > 56rem) and (height > 35rem) {
+  html {
+    scroll-padding-top: 5.5rem;
+  }
+}
