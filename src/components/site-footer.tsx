@@ -1,4 +1,4 @@
-import { BookOpen } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 import { QURAN_CREDITS, SITE_LINKS } from "@/lib/site";
@@ -18,7 +18,7 @@ export function SiteFooter() {
         <div className={styles.footerBrand}>
           <Link href="/" className={styles.brand}>
             <span className={styles.brandMark}>
-              <BookOpen aria-hidden="true" size={22} strokeWidth={1.7} />
+              <Image src="/nuruna-logo.svg" alt="" width={30} height={30} unoptimized />
             </span>
             <span className={styles.brandName}>Nuruna</span>
           </Link>

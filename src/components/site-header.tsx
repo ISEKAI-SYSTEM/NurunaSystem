@@ -1,6 +1,6 @@
 "use client";
 
-import { BookOpen } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Suspense, useSyncExternalStore } from "react";
@@ -46,7 +46,7 @@ export function SiteHeader({ floatOnScroll = true }: { floatOnScroll?: boolean }
       <div className={styles.bar}>
         <Link href="/" className={styles.brand}>
           <span className={styles.brandMark}>
-            <BookOpen aria-hidden="true" size={22} strokeWidth={1.7} />
+            <Image src="/nuruna-logo.svg" alt="" width={30} height={30} unoptimized priority />
           </span>
           <span className={styles.brandName}>Nuruna</span>
         </Link>

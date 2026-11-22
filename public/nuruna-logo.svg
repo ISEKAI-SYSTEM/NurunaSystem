@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="93 88 1068 1068" role="img" aria-label="Nuruna">
+  <g fill="none" stroke-linecap="round">
+    <!-- headband -->
+    <path d="M243 536A389 389 0 0 1 1011 536" stroke="#02533C" stroke-width="68" stroke-linecap="butt"/>
+    <!-- sound wave -->
+    <g stroke="#E8A90C" stroke-width="55">
+      <path d="M451 519v50M538 458v170M627 384v316M715 458v170M802 519v50"/>
+    </g>
+    <!-- open book -->
+    <path d="M350 760C455 760 560 805 627 895C694 805 799 760 904 760" stroke="#6CB535" stroke-width="72" stroke-linejoin="round"/>
+    <path d="M350 892C455 892 560 937 627 1032C694 937 799 892 904 892" stroke="#078C50" stroke-width="72" stroke-linejoin="round"/>
+  </g>
+  <!-- ear cups -->
+  <g fill="#02533C">
+    <path id="cup" d="M226 560C160 560 103 620 103 690V790C103 860 160 920 226 920A58 58 0 0 0 284 862V618A58 58 0 0 0 226 560Z"/>
+    <use href="#cup" transform="matrix(-1 0 0 1 1254 0)"/>
+  </g>
+</svg>

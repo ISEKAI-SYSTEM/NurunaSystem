@@ -5,7 +5,7 @@ import { seededRng } from "@/lib/latihan/quiz";
 import fixtures from "./__fixtures__/ayat.json";
 import { normalizeWord } from "./normalize";
 import { isPickCorrect, passageWords, pickOptions, pickResult } from "./pilih";
-import { type SetoranVerseInput, checkSetoranLive } from "./setoran";
+import { type SetoranVerseInput, checkSetoranLive, holdLiveProgress } from "./setoran";
 
 type FixtureWord = { position: number; uthmani: string; imlaei: string };
 const raw = fixtures.verses as Record<string, FixtureWord[]>;
@@ -69,6 +69,38 @@ describe("checkSetoranLive", () => {
     const r = statuses([...words("112:1"), ...words("112:2")].join(" "));
     expect(r.words.every((w) => w.status === "benar")).toBe(true);
     expect(r.next).toBe(6);
+  });
+
+  it("derau di ujung tidak membuka kata berikutnya selama tentativeTail", () => {
+    const [a, b] = words("112:1");
+    const r = statuses(`${a} ${b} اه`, true);
+    expect(r.words.map((w) => w.status)).toEqual(["benar", "benar", "belum", "belum", "belum", "belum"]);
+    expect(r.next).toBe(2);
+  });
+});
+
+describe("holdLiveProgress", () => {
+  const [a, b, c] = words("112:1");
+
+  it("teks sementara yang direvisi lebih pendek tidak menyembunyikan kata lagi", () => {
+    const longer = statuses(`${a} ${b} ${c}`, true);
+    const shorter = statuses(`${a} ${b}`, true);
+    const held = holdLiveProgress(longer, shorter);
+    expect(held.next).toBe(3);
+    expect(held.words.slice(0, 3).map((w) => w.status)).toEqual(["benar", "benar", "benar"]);
+  });
+
+  it("kemajuan baru dan penyelarasan ulang kata sebelumnya tetap dipakai", () => {
+    const first = statuses(`${a} ${b}`, true);
+    const later = statuses(`${a} ${c} ${words("112:1")[3]}`, true);
+    const held = holdLiveProgress(first, later);
+    expect(held).toBe(later);
+    expect(held.words[1].status).toBe("terlewat");
+  });
+
+  it("tanpa hasil sebelumnya mengembalikan hasil baru", () => {
+    const r = statuses(a);
+    expect(holdLiveProgress(null, r)).toBe(r);
   });
 });
 

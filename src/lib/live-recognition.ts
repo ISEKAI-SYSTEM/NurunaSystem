@@ -47,6 +47,29 @@ function fatalMessage(code: string): string | null {
   }
 }
 
+/**
+ * Chrome Android dengan `continuous` sering mengirim hasil final kumulatif
+ * ("قل", "قل هو", "قل هو الله") atau mengulang hasil yang sama. Gabungkan
+ * sehingga tiap kata hanya muncul sekali.
+ */
+export function mergeSegments(texts: readonly string[]): string[] {
+  const out: string[] = [];
+  for (const text of texts) {
+    const last = out.at(-1);
+    if (last !== undefined && (text === last || last.startsWith(`${text} `))) continue;
+    if (last !== undefined && text.startsWith(`${last} `)) out[out.length - 1] = text;
+    else out.push(text);
+  }
+  return out;
+}
+
+/** Buang awalan teks sementara yang mengulang hasil final terakhir. */
+export function stripRepeatedPrefix(interim: string, lastFinal: string | undefined): string {
+  if (!lastFinal || !interim) return interim;
+  if (interim === lastFinal) return "";
+  return interim.startsWith(`${lastFinal} `) ? interim.slice(lastFinal.length + 1) : interim;
+}
+
 export type LiveListener = {
   stop(): void;
 };
@@ -68,6 +91,7 @@ export function listenLive({
 
   let stopped = false;
   let finals: string[] = [];
+  let pendingInterim = "";
   let current: Recognition | null = null;
 
   const begin = () => {
@@ -78,17 +102,19 @@ export function listenLive({
     recognition.maxAlternatives = 1;
     const before = finals;
     recognition.onresult = (e) => {
-      const sessionFinals: string[] = [];
+      const rawFinals: string[] = [];
       let interim = "";
       for (let i = 0; i < e.results.length; i++) {
         const result = e.results[i];
         const text = result[0]?.transcript.trim() ?? "";
         if (!text) continue;
-        if (result.isFinal) sessionFinals.push(text);
+        if (result.isFinal) rawFinals.push(text);
         else interim += ` ${text}`;
       }
+      const sessionFinals = mergeSegments(rawFinals);
       finals = [...before, ...sessionFinals];
-      onText(finals.join(" "), interim.trim());
+      pendingInterim = stripRepeatedPrefix(interim.trim(), sessionFinals.at(-1));
+      onText(finals.join(" "), pendingInterim);
     };
     recognition.onerror = (e) => {
       const message = fatalMessage(e.error);
@@ -99,6 +125,13 @@ export function listenLive({
     };
     recognition.onend = () => {
       if (stopped) return;
+      // Sesi berakhir (jeda panjang / batas waktu) sebelum teks sementara
+      // menjadi final: simpan agar kata itu tidak hilang saat sesi baru dimulai.
+      if (pendingInterim) {
+        finals = [...finals, pendingInterim];
+        pendingInterim = "";
+        onText(finals.join(" "), "");
+      }
       try {
         begin();
       } catch {

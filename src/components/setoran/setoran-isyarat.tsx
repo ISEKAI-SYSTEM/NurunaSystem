@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { type HandFrame, HandTracker } from "@/components/isyarat/hand-tracker";
-import { PersonalSamplesNote, TeachSignControls, useTeachSign } from "@/components/isyarat/teach-sign";
+import { PersonalSamplesNote, TeachSignButton, TeachSignPanel, useTeachSign } from "@/components/isyarat/teach-sign";
 import { useIsyaratModel } from "@/components/isyarat/use-isyarat-model";
 import { Button } from "@/components/ui/button";
 import { LETTER_BY_ID } from "@/lib/isyarat/hijaiyah";
@@ -215,7 +215,9 @@ export function SetoranIsyarat({
           compact
         />
 
-        {step && word && (
+        {teach.teaching && <TeachSignPanel teaching={teach.teaching} onCancel={teach.cancel} />}
+
+        {!teach.teaching && step && word && (
           <section aria-label="Huruf yang ditunggu" className="flex flex-col gap-2 rounded-lg border bg-background p-3">
             <p className="font-medium">
               Kata ke-{session.word + 1} dari {words.length}, huruf ke-{session.letter + 1}
@@ -285,13 +287,7 @@ export function SetoranIsyarat({
             )}
 
             {showLetter && LETTER_BY_ID.has(step.id) && (
-              <TeachSignControls
-                letter={step.id}
-                name={step.name}
-                teaching={teach.teaching}
-                onStart={teach.start}
-                onCancel={teach.cancel}
-              />
+              <TeachSignButton letter={step.id} name={step.name} onStart={teach.start} />
             )}
 
             {feedback && (
@@ -306,7 +302,7 @@ export function SetoranIsyarat({
           </section>
         )}
 
-        <div className="flex flex-wrap gap-2">
+        <div className={teach.teaching ? "hidden" : "flex flex-wrap gap-2"}>
           {reveal !== "semua" && !showLetter && (
             <Button
               variant="outline"

@@ -360,25 +360,6 @@ export default function TentangPage() {
             <strong>WCAG 2.2 tingkat AA</strong>, yang juga diterbitkan sebagai
             standar internasional <strong>ISO/IEC 40500:2025</strong>.
           </p>
-          <p className="text-lg leading-relaxed">
-            <strong>Status: sebagian sesuai.</strong> Ke-55 kriteria WCAG 2.2
-            tingkat A dan AA sudah diperiksa satu per satu. Semua halaman
-            (beranda, daftar surah, halaman baca, latihan, pernyataan ini, dan
-            lab isyarat) mendapat skor aksesibilitas Lighthouse 100 dan 0
-            pelanggaran axe-core, juga saat fitur interaktif dipakai (setoran,
-            Tanya Nuruna, mode hafalan, kuis, kamera, perintah suara, kontras
-            tinggi). Uji keyboard, zoom 400%, dan jarak teks juga lulus. Audit
-            itu dilakukan pada 21 November 2026; fitur yang ditambahkan
-            sesudahnya belum diaudit ulang (lihat{" "}
-            <a href="#kriteria-terbuka" className={linkClass}>
-              catatan per kriteria WCAG
-            </a>
-            ). Pemeriksaan otomatis tidak bisa menemukan semua masalah, jadi
-            pengujian manual dengan pengguna dan screen reader masih berjalan.
-          </p>
-          <p className="text-[var(--home-muted)]">
-            Pernyataan ini terakhir diperbarui: {ACCESSIBILITY_STATEMENT_DATE}
-          </p>
         </Section>
 
         <Section

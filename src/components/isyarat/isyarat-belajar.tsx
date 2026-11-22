@@ -13,7 +13,7 @@ import { StabilityTracker } from "@/lib/isyarat/stability";
 import { seededRng, shuffle } from "@/lib/latihan/quiz";
 
 import { type HandFrame, HandTracker } from "./hand-tracker";
-import { PersonalSamplesNote, TeachSignControls, useTeachSign } from "./teach-sign";
+import { PersonalSamplesNote, TeachSignButton, TeachSignPanel, useTeachSign } from "./teach-sign";
 import { useIsyaratModel } from "./use-isyarat-model";
 
 const LETTERS_PER_ROUND = 10;
@@ -196,8 +196,8 @@ export function IsyaratBelajar() {
           onNext={next}
           onSwitch={() => start("ketuk")}
         />
-        <section aria-label="Kamera" className="rounded-xl border bg-card p-5">
-          <HandTracker onFrame={forwardFrame} />
+        <section aria-label="Kamera" className="rounded-xl border bg-card p-4">
+          <HandTracker onFrame={forwardFrame} compact />
         </section>
       </div>
     );
@@ -237,12 +237,12 @@ function SignGuide({ letter }: { letter: HijaiyahLetter }) {
       <Image
         src={sign.image}
         alt={`Gambar isyarat huruf ${letter.name}`}
-        width={160}
-        height={160}
-        className="size-36 rounded-lg border bg-white"
+        width={144}
+        height={144}
+        className="size-32 rounded-lg border bg-white [@media(max-height:50rem)]:size-24"
       />
       <figcaption className="flex min-w-56 flex-1 flex-col gap-1">
-        <span className="text-sm leading-relaxed">
+        <span className="text-sm leading-relaxed [@media(max-height:50rem)]:text-xs">
           <strong>Cara:</strong> {sign.description}
         </span>
         <span className="text-xs text-muted-foreground">
@@ -332,66 +332,71 @@ function CameraPractice({
   const otherLetter = leading && leading !== letter.id ? LETTER_BY_ID.get(leading)?.name : null;
 
   return (
-    <section aria-labelledby="judul-isyarat" className="flex flex-col gap-3 rounded-xl border bg-card p-5">
-      <p className="text-base text-muted-foreground">{progress} · Latihan dengan kamera</p>
-      <h2 id="judul-isyarat" ref={headingRef} tabIndex={-1} className="text-2xl font-semibold outline-none">
+    <section
+      aria-labelledby="judul-isyarat"
+      className="flex flex-col gap-3 rounded-xl border bg-card p-4 [@media(max-height:50rem)]:gap-2"
+    >
+      <p className="text-sm text-muted-foreground">{progress} · Latihan dengan kamera</p>
+      <h2 id="judul-isyarat" ref={headingRef} tabIndex={-1} className="text-xl font-semibold outline-none">
         Peragakan isyarat huruf {letter.name}
       </h2>
-      <SignGuide letter={letter} />
-      <p className="text-base">Tahan isyarat sampai indikator penuh. Tidak ada batas waktu.</p>
-
-      {!done && (
-        <div className="flex flex-col gap-2">
-          <p id={progressId} className="font-medium">
-            {hold > 0 ? `Menahan isyarat ${letter.name}…` : otherLetter ? `Terlihat seperti isyarat ${otherLetter}` : "Menunggu isyarat…"}
-          </p>
-          <div
-            role="progressbar"
-            aria-labelledby={progressId}
-            aria-valuemin={0}
-            aria-valuemax={100}
-            aria-valuenow={Math.round(hold * 100)}
-            className="h-4 w-full max-w-md overflow-hidden rounded-full border border-input bg-background"
-          >
-            <div className="h-full bg-primary transition-[width]" style={{ width: `${hold * 100}%` }} />
-          </div>
-          <TeachSignControls
-            letter={letter.id}
-            name={letter.name}
-            teaching={teach.teaching}
-            onStart={teach.start}
-            onCancel={teach.cancel}
-          />
-          {taught && <p className="text-sm font-medium">{taught}</p>}
-        </div>
-      )}
-
-      {done ? (
-        <div
-          ref={feedbackRef}
-          tabIndex={-1}
-          data-status={done === "benar" ? "benar" : "terlewat"}
-          className="setoran-status flex flex-col gap-3 rounded-lg border border-s-4 bg-background p-4"
-        >
-          <p className="inline-flex items-center gap-2 text-lg font-semibold">
-            {done === "benar" ? <Check aria-hidden="true" className="size-6" /> : <SkipForward aria-hidden="true" className="size-6" />}
-            {done === "benar" ? `Benar! Isyarat ${letter.name} dikenali.` : `Huruf ${letter.name} dilewati.`}
-          </p>
-          <Button className="h-11 w-fit px-5 text-base" onClick={onNext}>
-            Huruf berikutnya
-          </Button>
-        </div>
+      {teach.teaching ? (
+        <TeachSignPanel teaching={teach.teaching} onCancel={teach.cancel} />
       ) : (
-        <div className="flex flex-wrap gap-2">
-          <Button variant="outline" className="h-11 px-4 text-base" onClick={skip}>
-            <SkipForward aria-hidden="true" className="size-5" />
-            Lewati huruf ini
-          </Button>
-          <Button variant="outline" className="h-11 px-4 text-base" onClick={onSwitch}>
-            <Hand aria-hidden="true" className="size-5" />
-            Ganti ke latihan tanpa kamera
-          </Button>
-        </div>
+        <>
+          <SignGuide letter={letter} />
+          <p className="text-sm [@media(max-height:50rem)]:sr-only">
+            Tahan isyarat sampai indikator penuh. Tidak ada batas waktu.
+          </p>
+
+          {!done && (
+            <div className="flex flex-col gap-2">
+              <p id={progressId} className="font-medium">
+                {hold > 0 ? `Menahan isyarat ${letter.name}…` : otherLetter ? `Terlihat seperti isyarat ${otherLetter}` : "Menunggu isyarat…"}
+              </p>
+              <div
+                role="progressbar"
+                aria-labelledby={progressId}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-valuenow={Math.round(hold * 100)}
+                className="h-4 w-full max-w-md overflow-hidden rounded-full border border-input bg-background"
+              >
+                <div className="h-full bg-primary transition-[width]" style={{ width: `${hold * 100}%` }} />
+              </div>
+              <TeachSignButton letter={letter.id} name={letter.name} onStart={teach.start} />
+              {taught && <p className="text-sm font-medium">{taught}</p>}
+            </div>
+          )}
+
+          {done ? (
+            <div
+              ref={feedbackRef}
+              tabIndex={-1}
+              data-status={done === "benar" ? "benar" : "terlewat"}
+              className="setoran-status flex flex-col gap-3 rounded-lg border border-s-4 bg-background p-4"
+            >
+              <p className="inline-flex items-center gap-2 text-lg font-semibold">
+                {done === "benar" ? <Check aria-hidden="true" className="size-6" /> : <SkipForward aria-hidden="true" className="size-6" />}
+                {done === "benar" ? `Benar! Isyarat ${letter.name} dikenali.` : `Huruf ${letter.name} dilewati.`}
+              </p>
+              <Button className="h-11 w-fit px-5 text-base" onClick={onNext}>
+                Huruf berikutnya
+              </Button>
+            </div>
+          ) : (
+            <div className="flex flex-wrap gap-2">
+              <Button variant="outline" className="h-11 px-4 text-base" onClick={skip}>
+                <SkipForward aria-hidden="true" className="size-5" />
+                Lewati huruf ini
+              </Button>
+              <Button variant="outline" className="h-11 px-4 text-base" onClick={onSwitch}>
+                <Hand aria-hidden="true" className="size-5" />
+                Ganti ke latihan tanpa kamera
+              </Button>
+            </div>
+          )}
+        </>
       )}
       <p aria-live="polite" className="sr-only">
         {announcement}

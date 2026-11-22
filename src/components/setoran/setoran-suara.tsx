@@ -1,14 +1,21 @@
 "use client";
 
 import { Lightbulb, Loader2, Mic, Square } from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import type { TranscribeResponse } from "@/app/api/ai/transcribe/route";
 import { Button } from "@/components/ui/button";
 import { canListenLive, type LiveListener, listenLive } from "@/lib/live-recognition";
 import { NO_RECORDING_SUPPORT, canRecord, micErrorMessage, pickMimeType } from "@/lib/recording";
 import { type SetoranReveal, useSettings } from "@/lib/settings";
-import { type SetoranResult, type SetoranWordInput, checkSetoran, checkSetoranLive } from "@/lib/setoran/setoran";
+import {
+  type LiveResult,
+  type SetoranResult,
+  type SetoranWordInput,
+  checkSetoran,
+  checkSetoranLive,
+  holdLiveProgress,
+} from "@/lib/setoran/setoran";
 import { speakAndWait, speakIndonesian, stopSpeaking, trackMic } from "@/lib/speech";
 
 import { LivePassage } from "./live-passage";
@@ -43,7 +50,7 @@ export function SetoranSuara({
   const [phase, setPhase] = useState<Phase>({ name: "siap" });
   const [announcement, setAnnouncement] = useState("");
   const [elapsed, setElapsed] = useState(0);
-  const [transcript, setTranscript] = useState({ final: "", interim: "" });
+  const [live, setLive] = useState<LiveResult>(() => checkSetoranLive(verses, "", basmalah));
   const [liveError, setLiveError] = useState<string | null>(null);
   const [hints, setHints] = useState<ReadonlySet<number>>(new Set());
   const { speakSetoranResult, voiceGuide } = useSettings();
@@ -60,18 +67,7 @@ export function SetoranSuara({
   const chunksRef = useRef<Blob[]>([]);
   const timerRef = useRef<number | null>(null);
   const abortRef = useRef<AbortController | null>(null);
-  const transcriptRef = useRef(transcript);
-  useEffect(() => {
-    transcriptRef.current = transcript;
-  }, [transcript]);
-
-  const live = useMemo(
-    () =>
-      checkSetoranLive(verses, `${transcript.final} ${transcript.interim}`, basmalah, {
-        tentativeTail: transcript.interim.length > 0,
-      }),
-    [verses, basmalah, transcript],
-  );
+  const transcriptRef = useRef({ final: "", interim: "" });
 
   const releaseMic = () => {
     listenerRef.current?.stop();
@@ -160,12 +156,20 @@ export function SetoranSuara({
     if (streamRef.current !== stream) return;
     trackMic(stream);
 
-    setTranscript({ final: "", interim: "" });
+    transcriptRef.current = { final: "", interim: "" };
+    setLive(checkSetoranLive(verses, "", basmalah));
     setHints(new Set());
     setLiveError(null);
     if (listen) {
       listenerRef.current = listenLive({
-        onText: (final, interim) => setTranscript({ final, interim }),
+        onText: (final, interim) => {
+          transcriptRef.current = { final, interim };
+          // Kata salah di ujung belum dinilai sampai kata sesudahnya terdengar:
+          // bisa jadi derau atau kata yang belum selesai dikenali. Penilaian
+          // akhir tetap memakai seluruh rekaman.
+          const next = checkSetoranLive(verses, `${final} ${interim}`, basmalah, { tentativeTail: true });
+          setLive((prev) => holdLiveProgress(prev, next));
+        },
         onError: (message) => setLiveError(message),
       });
     } else {

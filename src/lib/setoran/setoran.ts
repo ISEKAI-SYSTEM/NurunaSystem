@@ -137,3 +137,9 @@ export function checkSetoranLive(
   }
   return { words, next: last + 1, extra };
 }
+
+export function holdLiveProgress(prev: LiveResult | null, next: LiveResult): LiveResult {
+  if (!prev || prev.words.length !== next.words.length || next.next >= prev.next) return next;
+  const words = next.words.map((w, i) => (i >= next.next && i < prev.next ? prev.words[i] : w));
+  return { words, next: prev.next, extra: next.extra };
+}

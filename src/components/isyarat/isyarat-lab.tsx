@@ -1,6 +1,7 @@
 "use client";
 
-import { BarChart3, Download, Hand, Trash2, Undo2, Upload } from "lucide-react";
+import { BarChart3, Check, Download, Hand, Trash2, Undo2, Upload } from "lucide-react";
+import Image from "next/image";
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -13,12 +14,16 @@ import {
   serializeDataset,
 } from "@/lib/isyarat/dataset";
 import { HIJAIYAH_LETTERS, LETTER_BY_ID } from "@/lib/isyarat/hijaiyah";
+import { kemenagSign } from "@/lib/isyarat/kemenag";
 import { useSettings } from "@/lib/settings";
+import { cn } from "@/lib/utils";
 
 import { type HandFrame, HandTracker } from "./hand-tracker";
 
 const CAPTURE_TIMEOUT_MS = 4000;
 const TARGET_PER_LETTER = 30;
+// Diisyaratkan per huruf (Pedoman Kemenag); setoran juga memeriksanya per huruf, jadi tidak direkam sendiri.
+const SPLIT_LETTERS: Record<string, readonly string[]> = { "lam-alif": ["lam", "alif"] };
 
 type Capture =
   | { state: "siap" }
@@ -34,7 +39,6 @@ function newId(): string {
 export function IsyaratLab() {
   const ids = {
     participant: useId(),
-    letter: useId(),
     frames: useId(),
     countdown: useId(),
     file: useId(),
@@ -149,7 +153,7 @@ export function IsyaratLab() {
   }, []);
 
   const takeSample = useCallback(() => {
-    if (!cameraOn || capture.state !== "siap") return;
+    if (!cameraOn || capture.state !== "siap" || SPLIT_LETTERS[settingsRef.current.letterId]) return;
     setError("");
     if (!useCountdown) {
       beginRecording();
@@ -227,56 +231,141 @@ export function IsyaratLab() {
     }
   }
 
-  return (
-    <div className="flex flex-col gap-8">
-      <section aria-labelledby="judul-kamera" className="flex flex-col gap-3">
-        <h2 id="judul-kamera" className="text-2xl font-semibold">
-          1. Kamera
-        </h2>
-        <HandTracker onFrame={handleFrame} onActiveChange={setCameraOn} />
-      </section>
+  const sign = kemenagSign(letterId);
+  const letterCount = counts.get(letterId) ?? 0;
+  const split = SPLIT_LETTERS[letterId];
+  const steps: { text: string; done: boolean; active: boolean }[] = [
+    { text: "Nyalakan kamera.", done: cameraOn, active: !cameraOn },
+    {
+      text: sign ? "Pilih huruf, lalu bentuk tangan seperti gambar." : "Pilih huruf, lalu bentuk isyaratnya.",
+      done: false,
+      active: cameraOn && capture.state === "siap",
+    },
+    {
+      text: keyboardShortcuts
+        ? "Tekan Ambil sampel (atau Spasi), tahan sampai selesai."
+        : "Tekan Ambil sampel, tahan sampai selesai.",
+      done: false,
+      active: capture.state !== "siap",
+    },
+    { text: `Ulangi sampai ${TARGET_PER_LETTER} sampel, lalu unduh data.`, done: false, active: false },
+  ];
 
-      <section aria-labelledby="judul-rekam" className="flex flex-col gap-4">
-        <h2 id="judul-rekam" className="text-2xl font-semibold">
+  return (
+    <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]">
+      <div className="flex min-w-0 flex-col gap-3">
+        <section aria-labelledby="judul-kamera" className="flex flex-col gap-2 rounded-xl border bg-card p-4">
+          <h2 id="judul-kamera" className="text-lg font-semibold">
+            1. Kamera
+          </h2>
+          <HandTracker onFrame={handleFrame} onActiveChange={setCameraOn} compact />
+        </section>
+
+        <section aria-labelledby="judul-uji" className="flex flex-col gap-2 rounded-xl border bg-card p-4">
+          <h2 id="judul-uji" className="text-lg font-semibold">
+            3. Uji pengenal
+          </h2>
+          <div className="flex flex-wrap items-center gap-3">
+            <Button
+              variant="outline"
+              className="h-10 px-3 text-sm"
+              disabled={counts.size < 2}
+              onClick={() => {
+                const e = evaluateClassifier(samples);
+                setEvaluation(e);
+                setMessage(`Akurasi ${Math.round(e.accuracy * 100)}% dari ${e.tested} sampel.`);
+              }}
+            >
+              <BarChart3 aria-hidden="true" className="size-4" />
+              Hitung akurasi
+            </Button>
+            <div className="flex items-center gap-2">
+              <input
+                id={ids.live}
+                type="checkbox"
+                checked={liveTest}
+                disabled={samples.length === 0}
+                onChange={(e) => {
+                  setLiveTest(e.target.checked);
+                  setLiveLabel("");
+                }}
+                className="size-5 accent-primary"
+              />
+              <label htmlFor={ids.live} className="text-sm">
+                Coba langsung di kamera
+              </label>
+            </div>
+          </div>
+          {counts.size < 2 && <p className="text-xs text-muted-foreground">Butuh sampel untuk minimal 2 huruf.</p>}
+          {liveTest && (
+            <p className="font-semibold">{cameraOn ? liveLabel || "Menunggu tangan…" : "Nyalakan kamera untuk mencoba."}</p>
+          )}
+          {evaluation && (
+            <details className="text-sm">
+              <summary className="cursor-pointer">
+                <strong>Akurasi {Math.round(evaluation.accuracy * 100)}%</strong> ({evaluation.correct} dari{" "}
+                {evaluation.tested},{" "}
+                {evaluation.method === "per-peserta" ? "diuji per peserta" : "diuji per sampel, baru satu peserta"}).
+                Lihat per huruf
+              </summary>
+              <table className="mt-2 w-full border-collapse">
+                <thead>
+                  <tr className="border-b">
+                    <th scope="col" className="py-1 text-start">Huruf</th>
+                    <th scope="col" className="py-1 text-end">Benar</th>
+                    <th scope="col" className="py-1 ps-4 text-start">Sering tertukar dengan</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {evaluation.letters.map((r) => (
+                    <tr key={r.letter} className="border-b">
+                      <th scope="row" className="py-1 text-start font-normal">
+                        {LETTER_BY_ID.get(r.letter)?.name ?? r.letter}
+                      </th>
+                      <td className="py-1 text-end tabular-nums">
+                        {r.correct}/{r.total}
+                      </td>
+                      <td className="py-1 ps-4">
+                        {Object.entries(r.confusions)
+                          .sort((a, b) => b[1] - a[1])
+                          .map(([l, n]) =>
+                            `${l === "tidak-dikenali" ? "tidak dikenali" : (LETTER_BY_ID.get(l)?.name ?? l)} (${n})`,
+                          )
+                          .join(", ") || "—"}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </details>
+          )}
+          <p className="text-xs text-muted-foreground">
+            Setiap peserta diuji memakai data peserta lain. Targetkan akurasi di atas 90% sebelum dipakai siswa.
+          </p>
+        </section>
+      </div>
+
+      <section aria-labelledby="judul-rekam" className="flex min-w-0 flex-col gap-3 rounded-xl border bg-card p-4">
+        <h2 id="judul-rekam" className="text-lg font-semibold">
           2. Ambil sampel
         </h2>
-        <div className="grid gap-4 sm:grid-cols-3">
-          <div className="flex flex-col gap-2">
-            <label htmlFor={ids.participant} className="font-medium">
-              Kode peserta
+
+        <div className="grid gap-x-3 gap-y-2 sm:grid-cols-[minmax(0,1fr)_7rem]">
+          <div className="flex flex-col gap-1">
+            <label htmlFor={ids.participant} className="text-sm font-medium">
+              Kode peserta <span className="font-normal text-muted-foreground">(anonim, mis. P01)</span>
             </label>
             <input
               id={ids.participant}
               value={participant}
               onChange={(e) => setParticipant(e.target.value)}
-              aria-describedby={`${ids.participant}-hint`}
               autoComplete="off"
-              className="min-h-11 rounded-lg border border-input bg-background px-3 text-base"
+              className="min-h-10 rounded-lg border border-input bg-background px-3 text-base"
             />
-            <span id={`${ids.participant}-hint`} className="text-sm text-muted-foreground">
-              Kode anonim, jangan nama asli.
-            </span>
           </div>
-          <div className="flex flex-col gap-2">
-            <label htmlFor={ids.letter} className="font-medium">
-              Huruf
-            </label>
-            <select
-              id={ids.letter}
-              value={letterId}
-              onChange={(e) => setLetterId(e.target.value)}
-              className="min-h-11 rounded-lg border border-input bg-background px-3 text-base"
-            >
-              {HIJAIYAH_LETTERS.map((l) => (
-                <option key={l.id} value={l.id}>
-                  {l.name} ({l.char}) — {counts.get(l.id) ?? 0} sampel
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="flex flex-col gap-2">
-            <label htmlFor={ids.frames} className="font-medium">
-              Frame per sampel
+          <div className="flex flex-col gap-1">
+            <label htmlFor={ids.frames} className="text-sm font-medium">
+              Frame/sampel
             </label>
             <input
               id={ids.frames}
@@ -285,232 +374,206 @@ export function IsyaratLab() {
               max={60}
               value={framesPerSample}
               onChange={(e) => setFramesPerSample(Math.min(60, Math.max(1, Number(e.target.value) || 1)))}
-              className="min-h-11 rounded-lg border border-input bg-background px-3 text-base"
+              className="min-h-10 rounded-lg border border-input bg-background px-3 text-base"
             />
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <input
-            id={ids.countdown}
-            type="checkbox"
-            checked={useCountdown}
-            onChange={(e) => setUseCountdown(e.target.checked)}
-            className="size-6 accent-primary"
-          />
-          <label htmlFor={ids.countdown} className="text-base">
-            Hitung mundur 3 detik sebelum merekam (untuk merekam sendiri)
-          </label>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-4 rounded-xl border bg-card p-4">
-          <span lang="ar" dir="rtl" aria-hidden="true" className="font-quran text-6xl leading-loose">
-            {letter.char}
-          </span>
-          <div className="flex flex-col gap-2">
-            <p className="text-lg font-semibold">
-              Huruf {letter.name}: {counts.get(letterId) ?? 0} dari {TARGET_PER_LETTER} sampel
-            </p>
-            <Button
-              className="h-11 w-fit px-5 text-base"
-              onClick={takeSample}
-              disabled={!cameraOn || capture.state !== "siap"}
-            >
-              <Hand aria-hidden="true" className="size-5" />
-              {capture.state === "merekam"
-                ? "Merekam…"
-                : capture.state === "hitung-mundur"
-                  ? `Bersiap… ${capture.seconds}`
-                  : "Ambil sampel"}
-            </Button>
-            <p className="text-sm text-muted-foreground">
-              {cameraOn
-                ? keyboardShortcuts
-                  ? "Tekan tombol atau Spasi, lalu tahan isyarat sebentar."
-                  : "Tekan tombol, lalu tahan isyarat sebentar."
-                : "Nyalakan kamera dulu."}
-            </p>
-          </div>
-        </div>
-        {error && <p className="font-medium text-destructive">{error}</p>}
-      </section>
-
-      <section aria-labelledby="judul-data" className="flex flex-col gap-4">
-        <h2 id="judul-data" className="text-2xl font-semibold">
-          3. Data
-        </h2>
-        <p className="text-base">
-          Total {samples.length} sampel.{" "}
-          {unsaved ? (
-            <strong>Ada sampel yang belum diunduh.</strong>
-          ) : (
-            "Semua sampel sudah diunduh."
-          )}
-        </p>
-        <div className="flex flex-wrap gap-2">
-          <Button className="h-11 px-4 text-base" onClick={download} disabled={!samples.length}>
-            <Download aria-hidden="true" className="size-5" />
-            Unduh data (JSON)
-          </Button>
-          <Button variant="outline" className="h-11 px-4 text-base" onClick={undoLast} disabled={!samples.length}>
-            <Undo2 aria-hidden="true" className="size-5" />
-            Hapus sampel terakhir
-          </Button>
-          <Button variant="outline" className="h-11 px-4 text-base" onClick={clearAll} disabled={!samples.length}>
-            <Trash2 aria-hidden="true" className="size-5" />
-            Hapus semua
-          </Button>
-          <label
-            htmlFor={ids.file}
-            className="inline-flex h-11 cursor-pointer items-center gap-2 rounded-lg border border-input bg-background px-4 text-base font-medium hover:bg-muted has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-offset-2"
-          >
-            <Upload aria-hidden="true" className="size-5" />
-            Muat data (JSON)
-            <input
-              id={ids.file}
-              type="file"
-              accept="application/json,.json"
-              className="sr-only"
-              onChange={(e) => {
-                void importFile(e.target.files?.[0]);
-                e.target.value = "";
-              }}
-            />
-          </label>
-        </div>
-
-        <table className="w-full max-w-xl border-collapse text-base">
-          <caption className="mb-2 text-start font-medium">Jumlah sampel per huruf</caption>
-          <thead>
-            <tr className="border-b">
-              <th scope="col" className="py-2 text-start">Huruf</th>
-              <th scope="col" className="py-2 text-end">Sampel</th>
-              <th scope="col" className="py-2 text-end">Status</th>
-            </tr>
-          </thead>
-          <tbody>
+        <fieldset className="flex flex-col gap-1">
+          <legend className="mb-1 text-sm font-medium">Huruf (angka = jumlah sampel)</legend>
+          <div className="flex flex-wrap gap-1" dir="rtl">
             {HIJAIYAH_LETTERS.map((l) => {
               const n = counts.get(l.id) ?? 0;
+              const selected = l.id === letterId;
               return (
-                <tr key={l.id} className="border-b" aria-current={l.id === letterId ? "true" : undefined}>
-                  <th scope="row" className="py-1.5 text-start font-normal">
-                    <span lang="ar" dir="rtl" className="me-2 font-quran text-xl">
-                      {l.char}
+                <button
+                  key={l.id}
+                  type="button"
+                  aria-pressed={selected}
+                  aria-label={SPLIT_LETTERS[l.id] ? `${l.name}, direkam per huruf` : `${l.name}, ${n} sampel`}
+                  onClick={() => setLetterId(l.id)}
+                  className={cn(
+                    "inline-flex h-10 min-w-11 items-center justify-center gap-1 rounded-md border px-1.5",
+                    selected
+                      ? "border-primary bg-primary text-primary-foreground"
+                      : "border-input bg-background hover:bg-muted",
+                    !selected && n >= TARGET_PER_LETTER && "border-[var(--status-benar)]",
+                  )}
+                >
+                  <span lang="ar" className="font-quran text-xl leading-none">
+                    {l.char}
+                  </span>
+                  {!SPLIT_LETTERS[l.id] && (
+                    <span dir="ltr" className="text-[0.7rem] tabular-nums opacity-80">
+                      {n}
                     </span>
-                    {l.name}
-                  </th>
-                  <td className="py-1.5 text-end tabular-nums">{n}</td>
-                  <td className="py-1.5 text-end">
-                    {n >= TARGET_PER_LETTER ? "Cukup" : `Kurang ${TARGET_PER_LETTER - n}`}
-                  </td>
-                </tr>
+                  )}
+                </button>
               );
             })}
-          </tbody>
-        </table>
-      </section>
+          </div>
+        </fieldset>
 
-      <section aria-labelledby="judul-uji" className="flex flex-col gap-4">
-        <h2 id="judul-uji" className="text-2xl font-semibold">
-          4. Uji pengenal
-        </h2>
-        <p className="max-w-prose text-base leading-relaxed">
-          Pengenal belajar dari sampel di atas. Untuk hasil yang jujur, setiap
-          peserta diuji memakai data peserta lain (butuh minimal 2 kode
-          peserta). Targetkan akurasi di atas 90% sebelum dipakai siswa.
-        </p>
+        <div className="flex flex-wrap items-start gap-4 rounded-lg border bg-background p-3">
+          <div className="flex items-center gap-3">
+            <span lang="ar" dir="rtl" aria-hidden="true" className="font-quran text-5xl leading-[1.6]">
+              {letter.char}
+            </span>
+            {sign && (
+              <Image
+                src={sign.image}
+                alt={`Gambar isyarat huruf ${letter.name}`}
+                width={128}
+                height={128}
+                className="size-28 rounded-lg border bg-white [@media(max-height:50rem)]:size-24"
+              />
+            )}
+          </div>
+          <div className="flex min-w-56 flex-1 flex-col gap-2">
+            {split ? (
+              <div className="flex flex-col gap-2">
+                <p className="font-semibold">Huruf {letter.name} tidak perlu direkam.</p>
+                <p className="text-sm">
+                  Isyaratnya {split.map((id) => LETTER_BY_ID.get(id)!.name).join(" lalu ")}, dan setoran memeriksanya
+                  per huruf. Rekam di huruf masing-masing:
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {split.map((id) => (
+                    <Button key={id} variant="outline" className="h-10 px-3 text-sm" onClick={() => setLetterId(id)}>
+                      <span lang="ar" dir="rtl" aria-hidden="true" className="font-quran text-xl leading-none">
+                        {LETTER_BY_ID.get(id)!.char}
+                      </span>
+                      Rekam {LETTER_BY_ID.get(id)!.name} ({counts.get(id) ?? 0})
+                    </Button>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <>
+              <p className="font-semibold">
+                Huruf {letter.name}: {letterCount} dari {TARGET_PER_LETTER} sampel
+              </p>
+              <div
+                role="progressbar"
+                aria-label={`Sampel huruf ${letter.name}`}
+                aria-valuemin={0}
+                aria-valuemax={TARGET_PER_LETTER}
+                aria-valuenow={Math.min(letterCount, TARGET_PER_LETTER)}
+                className="h-2.5 w-full overflow-hidden rounded-full border border-input bg-background"
+              >
+                <div
+                  className="h-full bg-[var(--status-benar)] transition-[width]"
+                  style={{ width: `${Math.min(100, (letterCount / TARGET_PER_LETTER) * 100)}%` }}
+                />
+              </div>
+              </>
+            )}
+            {sign && (
+              <p className="text-xs leading-relaxed text-muted-foreground">
+                <strong className="text-foreground">Cara:</strong> {sign.description}
+              </p>
+            )}
+          </div>
+        </div>
+
+        <ol className="grid gap-x-4 gap-y-1 sm:grid-cols-2">
+          {steps.map((s, i) => (
+            <li
+              key={i}
+              aria-current={s.active ? "step" : undefined}
+              className={cn("flex items-start gap-2 text-sm leading-snug", s.active && "font-semibold")}
+            >
+              <span
+                aria-hidden="true"
+                className={cn(
+                  "inline-flex size-5 shrink-0 items-center justify-center rounded-full border text-[0.7rem] font-bold",
+                  s.done && "border-[var(--status-benar)] bg-[var(--status-benar)] text-white",
+                  s.active && "border-primary bg-primary text-primary-foreground",
+                )}
+              >
+                {s.done ? <Check className="size-3" /> : i + 1}
+              </span>
+              <span>
+                {s.text}
+                {s.done && <span className="sr-only"> (selesai)</span>}
+              </span>
+            </li>
+          ))}
+        </ol>
+
         <div className="flex flex-wrap items-center gap-3">
-          <Button
-            variant="outline"
-            className="h-11 px-4 text-base"
-            disabled={counts.size < 2}
-            onClick={() => {
-              const e = evaluateClassifier(samples);
-              setEvaluation(e);
-              setMessage(`Akurasi ${Math.round(e.accuracy * 100)}% dari ${e.tested} sampel.`);
-            }}
-          >
-            <BarChart3 aria-hidden="true" className="size-5" />
-            Hitung akurasi
+          <Button className="h-11 px-5 text-base" onClick={takeSample} disabled={!cameraOn || capture.state !== "siap" || Boolean(split)}>
+            <Hand aria-hidden="true" className="size-5" />
+            {capture.state === "merekam"
+              ? "Merekam…"
+              : capture.state === "hitung-mundur"
+                ? `Bersiap… ${capture.seconds}`
+                : "Ambil sampel"}
           </Button>
           <div className="flex items-center gap-2">
             <input
-              id={ids.live}
+              id={ids.countdown}
               type="checkbox"
-              checked={liveTest}
-              disabled={samples.length === 0}
-              onChange={(e) => {
-                setLiveTest(e.target.checked);
-                setLiveLabel("");
-              }}
-              className="size-6 accent-primary"
+              checked={useCountdown}
+              onChange={(e) => setUseCountdown(e.target.checked)}
+              className="size-5 accent-primary"
             />
-            <label htmlFor={ids.live} className="text-base">
-              Coba pengenal langsung di kamera
+            <label htmlFor={ids.countdown} className="text-sm">
+              Hitung mundur 3 detik (merekam sendiri)
             </label>
           </div>
         </div>
-        {counts.size < 2 && (
-          <p className="text-sm text-muted-foreground">Butuh sampel untuk minimal 2 huruf.</p>
-        )}
-        {liveTest && (
-          <p className="text-lg font-semibold">
-            {cameraOn ? liveLabel || "Menunggu tangan…" : "Nyalakan kamera untuk mencoba."}
+        {error && <p className="text-sm font-medium text-destructive">{error}</p>}
+
+        <div className="flex flex-col gap-2 border-t pt-3">
+          <p className="text-sm">
+            Total {samples.length} sampel.{" "}
+            {unsaved ? <strong>Ada sampel yang belum diunduh.</strong> : "Semua sampel sudah diunduh."}
           </p>
-        )}
-
-        {evaluation && (
-          <div className="flex flex-col gap-3">
-            <p className="text-lg">
-              <strong>Akurasi {Math.round(evaluation.accuracy * 100)}%</strong> ({evaluation.correct} dari{" "}
-              {evaluation.tested} sampel benar,{" "}
-              {evaluation.method === "per-peserta"
-                ? "diuji per peserta"
-                : "diuji per sampel karena baru ada satu peserta"}
-              ).
-            </p>
-            <table className="w-full max-w-xl border-collapse text-base">
-              <caption className="mb-2 text-start font-medium">Hasil per huruf (yang paling lemah di atas)</caption>
-              <thead>
-                <tr className="border-b">
-                  <th scope="col" className="py-2 text-start">Huruf</th>
-                  <th scope="col" className="py-2 text-end">Benar</th>
-                  <th scope="col" className="py-2 text-start ps-4">Sering tertukar dengan</th>
-                </tr>
-              </thead>
-              <tbody>
-                {evaluation.letters.map((r) => (
-                  <tr key={r.letter} className="border-b">
-                    <th scope="row" className="py-1.5 text-start font-normal">
-                      {LETTER_BY_ID.get(r.letter)?.name ?? r.letter}
-                    </th>
-                    <td className="py-1.5 text-end tabular-nums">
-                      {r.correct}/{r.total}
-                    </td>
-                    <td className="py-1.5 ps-4">
-                      {Object.entries(r.confusions)
-                        .sort((a, b) => b[1] - a[1])
-                        .map(([l, n]) =>
-                          `${l === "tidak-dikenali" ? "tidak dikenali" : (LETTER_BY_ID.get(l)?.name ?? l)} (${n})`,
-                        )
-                        .join(", ") || "—"}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="flex flex-wrap gap-2">
+            <Button className="h-10 px-3 text-sm" onClick={download} disabled={!samples.length}>
+              <Download aria-hidden="true" className="size-4" />
+              Unduh data (JSON)
+            </Button>
+            <label
+              htmlFor={ids.file}
+              className="inline-flex h-10 cursor-pointer items-center gap-2 rounded-lg border border-input bg-background px-3 text-sm font-medium hover:bg-muted has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-offset-2"
+            >
+              <Upload aria-hidden="true" className="size-4" />
+              Muat data
+              <input
+                id={ids.file}
+                type="file"
+                accept="application/json,.json"
+                className="sr-only"
+                onChange={(e) => {
+                  void importFile(e.target.files?.[0]);
+                  e.target.value = "";
+                }}
+              />
+            </label>
+            <Button variant="outline" className="h-10 px-3 text-sm" onClick={undoLast} disabled={!samples.length}>
+              <Undo2 aria-hidden="true" className="size-4" />
+              Hapus terakhir
+            </Button>
+            <Button variant="outline" className="h-10 px-3 text-sm" onClick={clearAll} disabled={!samples.length}>
+              <Trash2 aria-hidden="true" className="size-4" />
+              Hapus semua
+            </Button>
           </div>
-        )}
-
-        <div className="max-w-prose rounded-xl border bg-card p-4 text-base leading-relaxed">
-          <p className="font-semibold">Memakai data ini di halaman Belajar Isyarat</p>
-          <ol className="mt-2 flex list-decimal flex-col gap-1 ps-6">
-            <li>Tekan <strong>Unduh data (JSON)</strong>.</li>
-            <li>
-              Simpan berkasnya di repo sebagai <code>public/isyarat/dataset.json</code>.
-            </li>
-            <li>Commit dan jalankan ulang aplikasi. Halaman <code>/belajar/isyarat</code> akan memakainya.</li>
-          </ol>
+          <details className="text-sm">
+            <summary className="cursor-pointer font-medium">Memakai data ini di aplikasi</summary>
+            <ol className="mt-1 flex list-decimal flex-col gap-0.5 ps-6">
+              <li>
+                Tekan <strong>Unduh data (JSON)</strong>.
+              </li>
+              <li>
+                Simpan sebagai <code>public/isyarat/dataset.json</code> (untuk menambah data lama, tekan{" "}
+                <strong>Muat data</strong> dulu sebelum merekam).
+              </li>
+              <li>Commit dan jalankan ulang aplikasi.</li>
+            </ol>
+          </details>
         </div>
       </section>
 
