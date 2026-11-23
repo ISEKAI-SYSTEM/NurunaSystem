@@ -12,7 +12,7 @@ export default function Home() {
     <WorkspaceShell page="home">
       <HomeContent
         hero={
-          <header className={styles.welcome}>
+          <header className={styles.welcome} data-hero>
             <div className={styles.welcomeCopy}>
               <h1>
                 Belajar Al-Qur’an,<br /> dengan cara Anda.

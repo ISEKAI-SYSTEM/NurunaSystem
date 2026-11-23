@@ -234,17 +234,18 @@
   }
 
   /* halaman dengan hero hijau: navbar transparan di atas hero */
-  html:has([data-bleed]) .header[data-top] .bar {
+  /* data-bleed: hero halaman dalam; data-hero: hero beranda (lihat workspace.module.css) */
+  html:has(:is([data-bleed], [data-hero])) .header[data-top] .bar {
     border-color: transparent;
     background-color: transparent;
     color: var(--home-light);
   }
 
-  html:has([data-bleed]) .header[data-top] :focus-visible {
+  html:has(:is([data-bleed], [data-hero])) .header[data-top] :focus-visible {
     --focus: var(--home-focus-dark);
   }
 
-  html:has([data-bleed]) .header[data-top] .menuButton:hover {
+  html:has(:is([data-bleed], [data-hero])) .header[data-top] .menuButton:hover {
     background: rgb(255 255 255 / 0.16);
   }
 

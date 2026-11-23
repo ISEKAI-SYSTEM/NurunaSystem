@@ -277,7 +277,7 @@ export function WelcomeScreen({
       className={styles.welcomeGate}
       data-voice-guide="off"
     >
-      <div className={styles.welcomeGateIntro}>
+      <div className={styles.welcomeGateIntro} data-hero>
         <p className={styles.welcomeGateEyebrow}>{copy.eyebrow}</p>
         <h1 id={`${baseId}-judul`} ref={heading} tabIndex={-1}>
           {copy.title}

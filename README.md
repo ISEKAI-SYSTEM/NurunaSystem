@@ -171,8 +171,6 @@ pnpm exec tsc --noEmit
 pnpm build
 ```
 
-[isi: sesuaikan nama skrip dengan yang tercantum pada `package.json`]
-
 ## Sumber Data
 
 - Teks Uthmani, terjemahan per kata, dan segmen waktu audio: [Quran.com API v4](https://api.quran.com/api/v4)
@@ -181,11 +179,11 @@ pnpm build
 - Penanda tajwid per huruf: Quran.com API
 - Tafsir Kemenag RI melalui [equran.id API v2](https://equran.id/apidev), dimuat per ayat lewat `/api/tafsir/[surah]/[ayat]`
 
-Data dari sumber tersebut disimpan sementara (*cache*) di server untuk mempercepat akses. Atribusi dan ketentuan penggunaan mengikuti masing-masing penyedia: [isi: tautan ketentuan penggunaan tiap sumber].
+Data dari sumber tersebut disimpan sementara (*cache*) di server untuk mempercepat akses. Atribusi dan ketentuan penggunaan mengikuti masing-masing penyedia.
 
 ## Akun Demo
 
-Aplikasi belum memiliki fitur akun atau login sehingga akun demo tidak diperlukan; seluruh fitur dapat dicoba tanpa login.
+Aplikasi belum memiliki fitur akun atau login sehingga akun demo tidak diperlukan, seluruh fitur dapat dicoba tanpa login.
 
 ## Aksesibilitas
 
@@ -204,13 +202,10 @@ Status kesesuaian secara keseluruhan dinyatakan **sebagian sesuai**, sebab pengu
 - Pengenalan tangan berjalan di peramban; tidak ada video yang dikirim ke server.
 - Izin mikrofon dan kamera diminta dengan penjelasan dalam Bahasa Indonesia.
 - Tidak ada akun atau data pribadi yang dikumpulkan; preferensi pengguna hanya disimpan di peramban.
-- Kunci API hanya berada di server, dan seluruh `/api/ai/*` dibatasi 20 permintaan per menit per IP (dapat diubah).
 
 ## Keterbatasan
 
-- Pengenal isyarat belum dapat digunakan hingga dataset dari SLB terkumpul.
 - Fitur AI bergantung pada penyedia pihak ketiga dan tidak aktif apabila kunci API tidak diisi.
-- Pembatas laju disimpan di memori sehingga baru berfungsi sebagai pengaman darurat dan belum memadai untuk skala produksi besar.
 
 ## Tim dan Kontribusi
 
@@ -221,4 +216,4 @@ Status kesesuaian secara keseluruhan dinyatakan **sebagian sesuai**, sebab pengu
 
 ## Lisensi
 
-MITKode sumber Nuruna dirilis di bawah [Lisensi MIT](LICENSE). Teks Al-Qur'an, terjemahan, tafsir, dan audio berasal dari pihak ketiga dan tunduk pada ketentuan masing-masing penyedia.
+MITKode sumber Nuruna dirilis di bawah Lisensi MIT. Teks Al-Qur'an, terjemahan, tafsir, dan audio berasal dari pihak ketiga dan tunduk pada ketentuan masing-masing penyedia.
