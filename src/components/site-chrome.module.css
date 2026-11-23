@@ -161,7 +161,7 @@
   block-size: 2.75rem;
   place-items: center;
   border-radius: 999px;
-  color: var(--home-ink);
+  color: inherit;
   transition: background-color 200ms, scale 150ms cubic-bezier(0.2, 0, 0, 1);
 }
 
@@ -188,11 +188,13 @@
     pointer-events: none;
   }
 
-  /* versi kecil dari bar mengambang desktop */
+  /* versi kecil dari bar mengambang desktop (keadaan float) */
   .bar {
     display: flex;
     gap: 0.375rem;
-    max-inline-size: calc(100% - 1.5rem);
+    inline-size: auto;
+    max-inline-size: none;
+    margin-inline: 0.75rem;
     min-block-size: 2.875rem;
     translate: 0 0.5rem;
     padding: 0.1875rem 0.25rem 0.1875rem 0.3125rem;
@@ -204,6 +206,46 @@
       0 12px 32px -12px rgb(0 51 48 / 0.32);
     backdrop-filter: blur(14px) saturate(1.5);
     pointer-events: auto;
+    /* .header berukuran tetap, jadi perubahan ukuran bar tidak menggeser layout halaman (penyebab getar) */
+    transition:
+      translate 450ms var(--chrome-ease),
+      margin-inline 350ms var(--chrome-ease),
+      min-block-size 350ms var(--chrome-ease),
+      padding 350ms var(--chrome-ease),
+      border-radius 350ms var(--chrome-ease),
+      background-color 350ms var(--chrome-ease),
+      border-color 350ms var(--chrome-ease),
+      box-shadow 350ms var(--chrome-ease),
+      backdrop-filter 350ms var(--chrome-ease),
+      color 350ms var(--chrome-ease);
+  }
+
+  /* di puncak halaman: penuh selebar layar, menempel ke atas */
+  .header[data-top] .bar {
+    translate: 0 0;
+    margin-inline: 0;
+    min-block-size: 3.375rem;
+    padding-inline: 0.75rem 0.5rem;
+    border-color: transparent transparent var(--home-line);
+    border-radius: 0;
+    background-color: var(--home-surface);
+    box-shadow: none;
+    backdrop-filter: blur(0) saturate(1);
+  }
+
+  /* halaman dengan hero hijau: navbar transparan di atas hero */
+  html:has([data-bleed]) .header[data-top] .bar {
+    border-color: transparent;
+    background-color: transparent;
+    color: var(--home-light);
+  }
+
+  html:has([data-bleed]) .header[data-top] :focus-visible {
+    --focus: var(--home-focus-dark);
+  }
+
+  html:has([data-bleed]) .header[data-top] .menuButton:hover {
+    background: rgb(255 255 255 / 0.16);
   }
 
   /* :focus-visible, bukan :focus-within: fokus yang dikembalikan ke tombol setelah tap tidak menahan bar */

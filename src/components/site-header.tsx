@@ -15,16 +15,23 @@ import { SITE_LINKS } from "@/lib/site";
 import styles from "./site-chrome.module.css";
 import workspace from "./workspace.module.css";
 
-let hidden = false;
+// top: di puncak halaman (mobile: penuh & menyatu dengan hero) · float: menyusut · hidden: scroll ke bawah
+type ChromeState = "top" | "float" | "hidden";
+let chrome: ChromeState = "top";
 let lastY = 0;
-function readHidden() {
-  const y = window.scrollY;
+function readChrome(): ChromeState {
+  const y = Math.max(0, window.scrollY); // iOS overscroll memberi nilai negatif
   const delta = y - lastY;
-  if (Math.abs(delta) > 6 || y < 4) {
-    hidden = y > 160 && delta > 0;
+  if (y < 4) {
+    chrome = "top";
     lastY = y;
+  } else if (Math.abs(delta) > 6) {
+    lastY = y;
+    if (y > 160 && delta > 0) chrome = "hidden";
+    // histeresis: top → float baru setelah 32px, float → top hanya di puncak, supaya tidak berkedip di batas
+    else if (y > 32 || chrome !== "top") chrome = "float";
   }
-  return hidden;
+  return chrome;
 }
 
 function subscribeScroll(onChange: () => void) {
@@ -33,13 +40,14 @@ function subscribeScroll(onChange: () => void) {
 }
 
 export function SiteHeader() {
-  const hidden = useSyncExternalStore(subscribeScroll, readHidden, () => false);
+  const state = useSyncExternalStore(subscribeScroll, readChrome, () => "top" as const);
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <header
       className={styles.header}
-      data-hidden={hidden || undefined}
+      data-hidden={state === "hidden" || undefined}
+      data-top={state === "top" || undefined}
       data-reader-topbar
     >
       <div className={styles.bar}>

@@ -471,9 +471,11 @@ html[data-contrast="tinggi"] .heading::after {
     font-size: 0.9375rem;
   }
 
+  /* hijau + pattern sampai tepi atas; navbar (3.375rem, lihat site-chrome.module.css) melayang di atasnya */
   .heading[data-bleed],
   .heading.compact[data-bleed] {
-    padding-block: 1.25rem;
+    margin-block-start: -3.375rem;
+    padding-block: calc(3.375rem + 1.25rem) 1.25rem;
   }
 
   .results {
