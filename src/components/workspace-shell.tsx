@@ -16,7 +16,7 @@ export function WorkspaceShell({
 }) {
   return (
     <div className={styles.shell} data-workspace={page}>
-      <SiteHeader floatOnScroll={page !== "reader"} />
+      <SiteHeader />
       <div className={sidebar ? styles.withSidebar : styles.body}>
         {sidebar}
         <main id="konten-utama" tabIndex={-1} className={styles.main}>

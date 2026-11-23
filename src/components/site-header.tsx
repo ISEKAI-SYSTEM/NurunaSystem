@@ -13,19 +13,16 @@ import { SITE_LINKS } from "@/lib/site";
 import styles from "./site-chrome.module.css";
 import workspace from "./workspace.module.css";
 
-let floating = false;
 let hidden = false;
 let lastY = 0;
-function readHeaderState() {
+function readHidden() {
   const y = window.scrollY;
-  if (!floating && y > 24) floating = true;
-  else if (floating && y < 4) floating = false;
   const delta = y - lastY;
   if (Math.abs(delta) > 6 || y < 4) {
     hidden = y > 160 && delta > 0;
     lastY = y;
   }
-  return hidden ? "hidden" : floating ? "floating" : "top";
+  return hidden;
 }
 
 function subscribeScroll(onChange: () => void) {
@@ -33,14 +30,13 @@ function subscribeScroll(onChange: () => void) {
   return () => window.removeEventListener("scroll", onChange);
 }
 
-export function SiteHeader({ floatOnScroll = true }: { floatOnScroll?: boolean }) {
-  const state = useSyncExternalStore(subscribeScroll, readHeaderState, () => "top");
+export function SiteHeader() {
+  const hidden = useSyncExternalStore(subscribeScroll, readHidden, () => false);
 
   return (
     <header
       className={styles.header}
-      data-scrolled={(floatOnScroll && state !== "top") || undefined}
-      data-hidden={state === "hidden" || undefined}
+      data-hidden={hidden || undefined}
       data-reader-topbar
     >
       <div className={styles.bar}>
