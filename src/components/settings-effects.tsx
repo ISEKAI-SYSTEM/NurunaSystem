@@ -5,13 +5,19 @@ import { useEffect } from "react";
 import { useSettings } from "@/lib/settings";
 
 export function SettingsEffects() {
-  const { highContrast, arabicSize } = useSettings();
+  const { highContrast, dyslexiaFont, arabicSize } = useSettings();
 
   useEffect(() => {
     const root = document.documentElement;
     if (highContrast) root.dataset.contrast = "tinggi";
     else delete root.dataset.contrast;
   }, [highContrast]);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (dyslexiaFont) root.dataset.font = "disleksia";
+    else delete root.dataset.font;
+  }, [dyslexiaFont]);
 
   useEffect(() => {
     document.documentElement.dataset.arabicSize = arabicSize;

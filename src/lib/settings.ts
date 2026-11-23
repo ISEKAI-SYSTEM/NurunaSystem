@@ -44,6 +44,7 @@ export type Settings = {
   showIsyarat: boolean;
   showTajweed: boolean;
   highContrast: boolean;
+  dyslexiaFont: boolean;
   continuousPlay: boolean;
   keyboardShortcuts: boolean;
   speakSetoranResult: boolean;
@@ -61,6 +62,7 @@ export const DEFAULT_SETTINGS: Settings = {
   showIsyarat: false,
   showTajweed: false,
   highContrast: false,
+  dyslexiaFont: false,
   continuousPlay: true,
   keyboardShortcuts: true,
   speakSetoranResult: false,

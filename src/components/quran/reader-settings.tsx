@@ -49,6 +49,11 @@ const toggles: { key: ToggleKey; label: string; hint?: string }[] = [
   },
   { key: "highContrast", label: "Kontras tinggi" },
   {
+    key: "dyslexiaFont",
+    label: "Huruf ramah disleksia",
+    hint: "Teks Latin memakai huruf OpenDyslexic yang bagian bawahnya lebih tebal agar huruf tidak tertukar. Teks Arab tidak berubah.",
+  },
+  {
     key: "continuousPlay",
     label: "Putar berkelanjutan",
     hint: "Lanjut otomatis ke ayat berikutnya.",

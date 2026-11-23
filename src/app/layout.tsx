@@ -3,6 +3,8 @@ import { Amiri_Quran, Atkinson_Hyperlegible_Next, Geist_Mono } from "next/font/g
 import { SettingsEffects } from "@/components/settings-effects";
 import { VoiceGuide } from "@/components/voice-guide";
 
+import "@fontsource/opendyslexic/400.css";
+import "@fontsource/opendyslexic/700.css";
 import "./globals.css";
 
 const fontSans = Atkinson_Hyperlegible_Next({

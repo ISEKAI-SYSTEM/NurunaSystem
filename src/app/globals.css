@@ -223,6 +223,10 @@ html:has(.pemutar-murottal) {
   }
 }
 
+html[data-font="disleksia"] {
+  --font-sans: "OpenDyslexic", system-ui, sans-serif;
+}
+
 html[data-contrast="tinggi"] {
   --background: oklch(1 0 0);
   --foreground: oklch(0 0 0);

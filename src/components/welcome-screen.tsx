@@ -10,6 +10,7 @@ import {
   type LucideIcon,
   Mic,
   Square,
+  Type,
   Volume2,
   X,
 } from "lucide-react";
@@ -33,7 +34,7 @@ import {
   visionScript,
   yesNoFromSpeech,
 } from "@/lib/onboarding";
-import { LEARNING_MODE_LABELS, type LearningMode, type Settings, useSettings } from "@/lib/settings";
+import { LEARNING_MODE_LABELS, type LearningMode, type Settings, updateSettings, useSettings } from "@/lib/settings";
 import { needsActivation, whenSpeechAllowed } from "@/lib/speech";
 
 import styles from "./workspace.module.css";
@@ -67,7 +68,7 @@ export function WelcomeScreen({
   onChoose: (mode: LearningMode, choice?: WelcomeChoice) => void;
   onSkip: () => void;
 }) {
-  const { keyboardShortcuts } = useSettings();
+  const { keyboardShortcuts, dyslexiaFont } = useSettings();
   const ttsSupported = useCanSpeak();
   const voiceSupported = useSyncExternalStore(noopSubscribe, canListen, () => false);
   const { speaking, speak, stop } = useSpeaker();
@@ -320,7 +321,24 @@ export function WelcomeScreen({
               {listen === "diam" ? "Jawab dengan suara" : "Berhenti mendengarkan"}
             </Button>
           )}
+          <Button
+            type="button"
+            variant="outline"
+            className={styles.welcomeGateFont}
+            aria-pressed={dyslexiaFont}
+            aria-describedby={`${baseId}-huruf`}
+            onClick={() => updateSettings({ dyslexiaFont: !dyslexiaFont })}
+          >
+            <Type aria-hidden="true" />
+            Huruf ramah disleksia
+            <span aria-hidden="true" className={styles.welcomeGateFontState}>
+              {dyslexiaFont ? "Aktif" : "Mati"}
+            </span>
+          </Button>
         </div>
+        <p id={`${baseId}-huruf`} className="sr-only">
+          Mengganti huruf Latin menjadi OpenDyslexic. Bisa diubah lagi di pengaturan halaman baca.
+        </p>
       </div>
 
       <p role="status" className={message ? styles.welcomeGateMessage : "sr-only"}>
