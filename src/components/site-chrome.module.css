@@ -19,7 +19,6 @@
   margin-inline: auto;
   padding: 0.625rem clamp(1.5rem, 3.4vw, 3.25rem);
   border: 1px solid transparent;
-  border-block-end-color: var(--home-line);
   background-color: var(--home-surface);
   transition:
     max-inline-size 450ms var(--chrome-ease),
@@ -128,7 +127,6 @@
   }
 
   :global([data-workspace]):has([data-bleed]) > .header:not([data-scrolled]) .bar {
-    border-block-end-color: rgb(255 255 255 / 0.12);
     background-color: transparent;
     color: var(--home-light);
   }
