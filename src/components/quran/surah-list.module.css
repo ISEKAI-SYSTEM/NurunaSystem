@@ -78,7 +78,9 @@
 
 .heading > .intro {
   grid-area: intro;
-  color: var(--home-light);
+  color: var(--home-light-muted);
+  max-inline-size: 44ch; /* patah ke 2 baris */
+  font-size: 0.875rem; /* sama dengan .searchHint */
 }
 
 .heading > .intro a {
