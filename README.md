@@ -6,7 +6,7 @@ Platform belajar Al-Qur'an yang inklusif untuk **tunanetra**, **tunarungu**, **t
 >
 > **Tim:** [Isekai System] · **Situs:** [https://nuruna-system.vercel.app] · **Video demo:** [isi tautan YouTube Unlisted]
 
-[isi: sisipkan satu atau dua tangkapan layar utama, misalnya beranda dan halaman pembaca]
+![Tampilan Nuruna di ponsel dan desktop: halaman Daftar Surah](docs/nuruna-preview.png)
 
 ## Daftar Isi
 
