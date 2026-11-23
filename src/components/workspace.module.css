@@ -534,6 +534,43 @@
   color: var(--home-hero-deep);
 }
 
+.welcomeGateFont {
+  min-block-size: 2.75rem;
+  height: auto;
+  padding: 0.5rem 1.125rem;
+  border-radius: 999px;
+  border-color: var(--home-light-muted);
+  background: transparent;
+  color: var(--home-light);
+  font-size: 1rem;
+  font-weight: 700;
+  white-space: normal;
+}
+
+.welcomeGateFont:hover {
+  background: rgb(255 255 255 / 0.12);
+  color: var(--home-light);
+}
+
+.welcomeGateFont[aria-pressed="true"],
+.welcomeGateFont[aria-pressed="true"]:hover {
+  border-color: var(--home-light);
+  background: var(--home-light);
+  color: var(--home-hero-deep);
+}
+
+.welcomeGateFontState {
+  padding: 0.0625rem 0.5rem;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.16);
+  font-size: 0.8125rem;
+}
+
+.welcomeGateFont[aria-pressed="true"] .welcomeGateFontState {
+  background: var(--home-hero-deep);
+  color: var(--home-light);
+}
+
 .welcomeGateWaiting {
   display: flex;
   align-items: center;
