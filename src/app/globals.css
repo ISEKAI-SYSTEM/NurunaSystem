@@ -178,6 +178,14 @@
     @apply font-sans;
   }
 
+  /* Sembunyikan scrollbar; scroll tetap jalan lewat roda mouse, keyboard, dan sentuh */
+  * {
+    scrollbar-width: none;
+  }
+  *::-webkit-scrollbar {
+    display: none;
+  }
+
   :where(
     a[href],
     button,
