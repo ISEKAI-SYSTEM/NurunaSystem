@@ -93,9 +93,16 @@
   grid-area: search;
 }
 
+.searchHint {
+  margin-block-start: 0.5rem;
+  padding-inline-start: 1.125rem;
+  color: var(--home-light-muted);
+  font-size: 0.875rem;
+}
+
 .searchIcon {
   position: absolute;
-  inset-block-start: 50%;
+  inset-block-start: 1.5rem; /* tengah input (3rem), bukan tengah .search yang ikut memuat hint */
   inset-inline-start: 1.125rem;
   translate: 0 -50%;
   color: var(--home-accent);
@@ -145,7 +152,7 @@
 }
 
 .search:focus-within input {
-  box-shadow: 0 0 0 4px rgb(255 255 255 / 0.18), 0 4px 14px rgb(0 0 0 / 0.25);
+  box-shadow: 0 0 0 4px rgb(255 255 255 / 0.18);
 }
 
 .clearSearch {
@@ -255,7 +262,7 @@
   --border: var(--home-line);
   --muted-foreground: var(--home-muted);
   inline-size: 100%;
-  max-inline-size: 80rem;
+  max-inline-size: 86rem;
   margin-inline: auto;
   padding-inline: clamp(1.5rem, 3.4vw, 3.25rem);
 }
@@ -368,7 +375,6 @@
 
 .search input {
   border-color: transparent;
-  box-shadow: 0 1px 2px rgb(0 0 0 / 0.2), 0 1px 3px 1px rgb(0 0 0 / 0.1);
 }
 
 .empty,
@@ -382,27 +388,21 @@
   padding-block: clamp(2.75rem, 9vh, 4.5rem);
   padding-inline: max(
     clamp(1.5rem, 3.4vw, 3.25rem),
-    calc((100% - 80rem) / 2 + clamp(1.5rem, 3.4vw, 3.25rem))
+    calc((100% - 86rem) / 2 + clamp(1.5rem, 3.4vw, 3.25rem))
   );
+  background: linear-gradient(180deg, var(--home-hero-deep), var(--home-hero));
 }
 
 .heading[data-bleed]::after {
   background: var(--home-gold);
-  mask:
-    url("/nuruna-pattern.svg") 0 0 / 56px 56px repeat,
-    radial-gradient(ellipse 60% 120% at 100% 50%, #000, transparent 75%);
-  mask-composite: intersect;
-  opacity: 0.2;
+  mask: url("/nuruna-pattern.svg") 0 0 / 56px 56px repeat;
+  opacity: 0.12;
 }
 
 @media (width > 56rem) and (height > 35rem) {
   .heading[data-bleed] {
     margin-block-start: -4.25rem;
     padding-block-start: calc(4.25rem + clamp(2.75rem, 9vh, 4.5rem));
-  }
-
-  .heading[data-bleed]::after {
-    inset-block-start: 4.25rem;
   }
 }
 

@@ -165,7 +165,7 @@ export function SurahList({
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             autoComplete="off"
-            placeholder="Contoh: Yasin, 67"
+            placeholder="Cari nama atau nomor surah"
           />
           {query && (
             <button
@@ -177,6 +177,9 @@ export function SurahList({
               <X aria-hidden="true" size={18} />
             </button>
           )}
+          <p id={`${inputId}-hint`} className={styles.searchHint}>
+            Contoh: Yasin, Al-Mulk, atau nomor 36
+          </p>
         </div>
       </header>
 

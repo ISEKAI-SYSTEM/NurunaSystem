@@ -14,7 +14,7 @@ export default async function SurahIndexPage() {
 
   return (
     <WorkspaceShell page="surah">
-      <SurahList chapters={chapters} juzs={juzs} fullBleed title="Daftar Surah" />
+      <SurahList chapters={chapters} juzs={juzs} fullBleed title="Al-Qur'an" intro="Daftar Surah" />
     </WorkspaceShell>
   );
 }

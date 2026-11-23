@@ -197,7 +197,7 @@
   flex-direction: column;
   align-self: center;
   width: 100%;
-  max-width: 80rem;
+  max-width: 86rem;
   padding: clamp(1.5rem, 3.4vw, 3.25rem);
 }
 
