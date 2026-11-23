@@ -86,16 +86,6 @@
   pointer-events: none;
 }
 
-.chapterInfo::before {
-  content: "";
-  display: block;
-  width: 2.5rem;
-  height: 3px;
-  margin-block-end: 0.875rem;
-  border-radius: 3px;
-  background: var(--home-gold);
-}
-
 .chapterInfo h1 {
   font-size: clamp(1.625rem, 4.8cqi, 2.5rem);
   font-weight: 750;

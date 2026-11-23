@@ -201,6 +201,17 @@
   }
 }
 
+@container surah-results (max-width: 27rem) {
+  .card:not([data-compact]) {
+    min-block-size: 3.75rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .card:not([data-compact]) .arabic {
+    font-size: 1.125rem;
+  }
+}
+
 .card {
   border-radius: 1rem;
 }

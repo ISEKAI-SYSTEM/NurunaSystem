@@ -5,7 +5,6 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(17rem, 28rem);
   grid-template-areas:
-    "rule  search"
     "title search"
     "intro search"
     "hint  search";
@@ -15,16 +14,6 @@
   padding: clamp(1.5rem, 4vh, 2.5rem) clamp(1.5rem, 3vw, 2.75rem);
   background: linear-gradient(135deg, var(--home-hero-deep), #004d40 50%, var(--home-hero));
   color: var(--home-light);
-}
-
-.heading::before {
-  content: "";
-  grid-area: rule;
-  width: 2.5rem;
-  height: 3px;
-  margin-block-end: 1rem;
-  border-radius: 3px;
-  background: var(--home-gold);
 }
 
 .heading::after {
@@ -55,10 +44,6 @@
 
 .heading.compact {
   padding-block: clamp(0.875rem, 2.2vh, 1.25rem);
-}
-
-.compact::before {
-  margin-block-end: 0.5rem;
 }
 
 .compact h1 {
@@ -322,6 +307,7 @@
 @container surah-results (max-width: 27rem) {
   .entries {
     grid-template-columns: minmax(0, 1fr);
+    gap: 0.5rem;
   }
 }
 
@@ -443,7 +429,7 @@ html[data-contrast="tinggi"] .heading::after {
 @media (max-width: 56rem) {
   .heading {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-areas: "rule" "title" "intro" "hint" "search";
+    grid-template-areas: "title" "intro" "hint" "search";
   }
 
   .search {
@@ -455,9 +441,53 @@ html[data-contrast="tinggi"] .heading::after {
   }
 }
 
+@media (max-width: 56rem) {
+  /* ikon panah saja; teks tetap jadi nama aksesibel */
+  .toTop {
+    inline-size: 2.5rem;
+    min-block-size: 2.5rem;
+    padding: 0;
+  }
+
+  .toTop [data-label] {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .toTop svg {
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+
+  .heading h1 {
+    font-size: clamp(1.375rem, 6vw, 1.75rem);
+  }
+
+  .heading > p {
+    font-size: 0.9375rem;
+  }
+
+  .heading[data-bleed],
+  .heading.compact[data-bleed] {
+    padding-block: 1.25rem;
+  }
+
+  .results {
+    margin-block-start: 1rem;
+  }
+
+  .juz + .juz {
+    margin-block-start: 1.25rem;
+  }
+}
+
 @media (max-width: 37.5rem) {
   .heading {
-    padding: 1.5rem;
+    padding: 1.25rem 1rem;
   }
 
   .contained,

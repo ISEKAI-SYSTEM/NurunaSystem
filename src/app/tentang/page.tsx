@@ -251,10 +251,6 @@ export default function TentangPage() {
             <BackLink />
             <StopSpeechButton className={backLinkStyles.backLink} />
           </div>
-          <span
-            aria-hidden="true"
-            className="h-[3px] w-10 rounded-full bg-[var(--home-gold-line)]"
-          />
           <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
             Tentang Kami
           </h1>

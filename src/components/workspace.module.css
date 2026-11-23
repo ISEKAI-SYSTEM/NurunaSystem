@@ -159,6 +159,21 @@
   --reader-topbar-size: 0rem;
 }
 
+@media (width <= 56rem) {
+  .shell[data-workspace="reader"] {
+    --reader-topbar-size: 3.375rem; /* = tinggi .header mobile */
+  }
+
+  .modeChevron {
+    display: none;
+  }
+
+  /* sama dengan aturan sembunyi navbar mobile di site-chrome.module.css */
+  .shell[data-workspace="reader"]:has(> [data-reader-topbar][data-hidden]:not(:has(:focus-visible))) {
+    --reader-topbar-size: 0rem;
+  }
+}
+
 .body {
   display: flex;
   flex: 1;
@@ -246,21 +261,10 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   grid-template-areas:
-    "rule  ."
     "title cta"
     "text  cta";
   align-items: center;
   column-gap: 2rem;
-}
-
-.welcomeCopy::before {
-  content: "";
-  grid-area: rule;
-  width: 2.5rem;
-  height: 3px;
-  margin-block-end: 1rem;
-  border-radius: 3px;
-  background: var(--home-gold);
 }
 
 .welcome h1 {
@@ -788,7 +792,7 @@ html[data-contrast="tinggi"] .welcome::after {
 @media (max-width: 50rem) {
   .welcomeCopy {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-areas: "rule" "title" "text" "cta";
+    grid-template-areas: "title" "text" "cta";
   }
 
   .welcomeCopy .start {
@@ -799,11 +803,12 @@ html[data-contrast="tinggi"] .welcome::after {
 
 @media (max-width: 37.5rem) {
   .main {
-    padding: 1rem;
+    padding: 0.75rem 1rem 1rem;
   }
 
   .welcome {
-    padding: 1.5rem;
+    padding: 1.25rem;
+    border-radius: 1.25rem;
   }
 
   .welcome::after {
@@ -811,15 +816,65 @@ html[data-contrast="tinggi"] .welcome::after {
   }
 
   .welcome h1 {
-    font-size: clamp(1.875rem, 8vw, 2.375rem);
+    font-size: clamp(1.5rem, 7vw, 1.875rem);
+  }
+
+  .welcome p {
+    font-size: 0.9375rem;
+  }
+
+  .welcomeCopy .start {
+    margin-block-start: 1rem;
+  }
+
+  .modes {
+    margin-block-start: 1rem;
+  }
+
+  .modes h2 {
+    font-size: 1.1875rem;
+  }
+
+  .modes > p:not([role]) {
+    margin-block-end: 0.875rem;
+    font-size: 0.9375rem;
   }
 
   .modeGrid {
     grid-template-columns: minmax(0, 1fr);
+    gap: 0.5rem;
+  }
+
+  .modeCard,
+  .answerGrid .modeCard {
+    gap: 0.75rem;
+    padding: 0.75rem;
+  }
+
+  .modeIcon {
+    width: 2.375rem;
+    height: 2.375rem;
+  }
+
+  .modeTitle,
+  .answerGrid .modeTitle {
+    font-size: 1rem;
+  }
+
+  .welcomeGate {
+    gap: 1rem;
   }
 
   .welcomeGateIntro {
-    padding: 1.5rem;
+    padding: 1.25rem;
     border-radius: 1.25rem;
+  }
+
+  .welcomeGateIntro h1 {
+    font-size: clamp(1.5rem, 7vw, 1.875rem);
+  }
+
+  .welcomeGateIntro > p:not(.welcomeGateEyebrow) {
+    font-size: 0.9375rem;
   }
 }

@@ -44,7 +44,7 @@ export function BackToTop({ className, label }: { className: string; label?: str
       }}
     >
       <ArrowUp aria-hidden="true" className="size-5" />
-      {label}
+      {label && <span data-label="">{label}</span>}
     </Button>
   );
 }

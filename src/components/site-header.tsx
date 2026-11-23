@@ -3,7 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Suspense, useSyncExternalStore } from "react";
+import { Menu, X } from "lucide-react";
+import { Dialog } from "radix-ui";
+import { Suspense, useState, useSyncExternalStore } from "react";
 
 import { StopSpeechButton } from "@/components/stop-speech-button";
 import { VoiceCommandButton } from "@/components/voice-command";
@@ -32,6 +34,7 @@ function subscribeScroll(onChange: () => void) {
 
 export function SiteHeader() {
   const hidden = useSyncExternalStore(subscribeScroll, readHidden, () => false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <header
@@ -57,6 +60,29 @@ export function SiteHeader() {
           <StopSpeechButton className={workspace.topbarButton} />
           <VoiceCommandButton className={workspace.topbarButton} />
           <WorkspaceModeStatus />
+
+          <Dialog.Root open={menuOpen} onOpenChange={setMenuOpen}>
+            <Dialog.Trigger className={styles.menuButton} aria-label="Buka menu" title="Menu">
+              <Menu aria-hidden="true" size={20} />
+            </Dialog.Trigger>
+            <Dialog.Portal>
+              <Dialog.Overlay className={styles.menuOverlay} />
+              <Dialog.Content className={styles.menu} aria-describedby={undefined}>
+                <div className={styles.menuBar}>
+                  <Dialog.Title className={styles.menuTitle}>Menu</Dialog.Title>
+                  <Dialog.Close className={styles.menuButton} aria-label="Tutup menu" title="Tutup menu">
+                    <X aria-hidden="true" size={20} />
+                  </Dialog.Close>
+                </div>
+                {/* klik link mana pun (termasuk halaman aktif) menutup menu */}
+                <nav aria-label="Navigasi utama" className={styles.menuNav} onClick={() => setMenuOpen(false)}>
+                  <Suspense fallback={<HeaderLinks />}>
+                    <ActiveHeaderLinks />
+                  </Suspense>
+                </nav>
+              </Dialog.Content>
+            </Dialog.Portal>
+          </Dialog.Root>
         </div>
       </div>
     </header>
