@@ -395,8 +395,8 @@
 
 .heading[data-bleed]::after {
   background: var(--home-gold);
-  mask: url("/nuruna-pattern.svg") 0 0 / 56px 56px repeat;
-  opacity: 0.12;
+  mask: url("/nuruna-pattern.svg") 0 0 / 32px 32px repeat;
+  opacity: 0.06;
 }
 
 @media (width > 56rem) and (height > 35rem) {
