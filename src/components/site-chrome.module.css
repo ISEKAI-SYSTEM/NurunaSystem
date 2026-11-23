@@ -14,10 +14,10 @@
   align-items: center;
   gap: 0.75rem 1.25rem;
   inline-size: 100%;
-  max-inline-size: 100%;
+  max-inline-size: 80rem; /* sama dengan .main di workspace.module.css */
   min-block-size: 4.25rem;
   margin-inline: auto;
-  padding: 0.625rem clamp(1rem, 3vw, 2.5rem);
+  padding: 0.625rem clamp(1.5rem, 3.4vw, 3.25rem);
   border: 1px solid transparent;
   border-block-end-color: var(--home-line);
   background-color: var(--home-surface);
@@ -209,9 +209,9 @@
   .nav {
     order: 3;
     flex-basis: 100%;
-    margin-inline: calc(-1 * clamp(1rem, 3vw, 2.5rem));
+    margin-inline: calc(-1 * clamp(1.5rem, 3.4vw, 3.25rem));
     overflow-x: auto;
-    padding: 0.25rem clamp(1rem, 3vw, 2.5rem);
+    padding: 0.25rem clamp(1.5rem, 3.4vw, 3.25rem);
     scrollbar-width: none;
   }
 }
