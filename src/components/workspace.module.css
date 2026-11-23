@@ -153,6 +153,29 @@
 
 .shell[data-workspace="reader"] {
   --reader-topbar-size: 4.25rem;
+  /* lebar sidebar; dipakai juga navbar (site-chrome.module.css) untuk sejajar dengan kolom bacaan */
+  --reader-sidebar: clamp(17rem, 25vw, 21rem);
+}
+
+@media (width > 56rem) {
+  .shell[data-workspace="reader"]:has([data-surah-index="closed"]) {
+    --reader-sidebar: 3.75rem;
+  }
+}
+
+/* desktop lebar: sidebar penuh sampai tepi atas, navbar hanya di atas kolom bacaan */
+@media (width > 70rem) and (height > 35rem) {
+  .shell[data-workspace="reader"] {
+    --reader-topbar-size: 0rem;
+  }
+
+  .shell[data-workspace="reader"] > .withSidebar {
+    margin-block-start: -4.25rem; /* = tinggi .header desktop */
+  }
+
+  .shell[data-workspace="reader"] .withSidebar .main {
+    padding-block-start: calc(4.25rem + 1rem);
+  }
 }
 
 .shell[data-workspace="reader"]:has(> [data-reader-topbar][data-hidden]:not(:focus-within)) {
@@ -160,17 +183,8 @@
 }
 
 @media (width <= 56rem) {
-  .shell[data-workspace="reader"] {
-    --reader-topbar-size: 3.375rem; /* = tinggi .header mobile */
-  }
-
   .modeChevron {
     display: none;
-  }
-
-  /* sama dengan aturan sembunyi navbar mobile di site-chrome.module.css */
-  .shell[data-workspace="reader"]:has(> [data-reader-topbar][data-hidden]:not(:has(:focus-visible))) {
-    --reader-topbar-size: 0rem;
   }
 }
 
@@ -183,14 +197,8 @@
 .withSidebar {
   display: grid;
   flex: 1;
-  grid-template-columns: clamp(17rem, 25vw, 21rem) minmax(0, 1fr);
+  grid-template-columns: var(--reader-sidebar) minmax(0, 1fr);
   transition: grid-template-columns 380ms cubic-bezier(0.2, 0, 0, 1);
-}
-
-@media (width > 56rem) {
-  .withSidebar:has(> [data-surah-index="closed"]) {
-    grid-template-columns: 3.75rem minmax(0, 1fr);
-  }
 }
 
 .withSidebar .main {

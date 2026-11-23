@@ -139,6 +139,18 @@
   }
 }
 
+/* reader desktop lebar: sidebar penuh sampai atas, navbar menyusut di atas kolom bacaan (58rem) */
+@media (width > 70rem) and (height > 35rem) {
+  :global([data-workspace="reader"]) > .header {
+    padding-inline-start: var(--reader-sidebar);
+    transition: padding-inline-start 380ms var(--chrome-ease);
+  }
+
+  :global([data-workspace="reader"]) > .header .bar {
+    max-inline-size: min(62rem, calc(100% - 3rem));
+  }
+}
+
 @media (width <= 72rem) {
   .actions [data-label] {
     position: absolute;
